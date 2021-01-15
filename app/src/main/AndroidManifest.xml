@@ -12,8 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryManager">
-        <activity android:name=".DetailsRecipe"></activity>
-        <activity android:name=".Recipe" />
+        <activity android:name=".TutorialSteps"></activity>
         <activity android:name=".Notification_ON_time" />
         <activity android:name=".Register" />
         <activity android:name=".Login" />
@@ -43,5 +42,6 @@
 
         <receiver android:name=".Notification_receiver_Dinner" />
     </application>
-
+     <activity android:name=".DetailsRecipe"/>
+        <activity android:name=".Recipe" />
 </manifest>
