@@ -42,5 +42,6 @@
 
         <receiver android:name=".Notification_receiver_Dinner" />
     </application>
-
+     <activity android:name=".DetailsRecipe"/>
+        <activity android:name=".Recipe" />
 </manifest>
