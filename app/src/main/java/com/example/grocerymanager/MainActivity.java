@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         cardsRecycler.setAdapter(TutorialCardAdapter);
     }
 }
-=======
-}
+
+
 
 
