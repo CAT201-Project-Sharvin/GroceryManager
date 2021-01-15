@@ -49,6 +49,7 @@ public class Notification_ON_time extends AppCompatActivity {
                 calendar2.set(Calendar.HOUR_OF_DAY,18);
                 calendar2.set(Calendar.MINUTE,0);
                 calendar2.set(Calendar.SECOND,0);
+                // Hello
 
                 Intent intent2 = new Intent(getApplicationContext(),Notification_receiver_Dinner.class);
                 PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplication(),300,intent2,PendingIntent.FLAG_UPDATE_CURRENT);

@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), Login.class));
     }
 
+  
+  
+  
+
     public void loadCards(){
         new Thread(new Runnable() {
             @Override
@@ -100,3 +104,7 @@ public class MainActivity extends AppCompatActivity {
         cardsRecycler.setAdapter(TutorialCardAdapter);
     }
 }
+=======
+}
+
+
