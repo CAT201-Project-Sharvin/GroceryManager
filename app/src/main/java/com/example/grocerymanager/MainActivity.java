@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    ImageView registerBtn, addBtn, scanBtn, deleteBtn, viewBtn, recipeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navi_view);
+        addBtn = findViewById(R.id.addBtn);
+        viewBtn = findViewById(R.id.viewBtn);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -61,6 +65,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         loadCards();
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), addGrocery.class));
+            }
+        });
+
+        viewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), listGrocery.class));
+            }
+        });
     }
 
 
