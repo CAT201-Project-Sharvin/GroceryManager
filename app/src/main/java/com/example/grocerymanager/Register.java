@@ -24,6 +24,7 @@ public class Register extends AppCompatActivity {
     Button RegisterBtn;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
+    TextView loginNavigation;
 
 
     @Override
@@ -35,7 +36,7 @@ public class Register extends AppCompatActivity {
         Email = findViewById(R.id.Email);
         Password = findViewById(R.id.Pass);
         RegisterBtn = findViewById(R.id.registerBtn);
-
+        loginNavigation = findViewById(R.id.loginNavi);
         fAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
 
@@ -76,6 +77,13 @@ public class Register extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+
+        loginNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });
 
