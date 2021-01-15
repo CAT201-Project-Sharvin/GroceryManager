@@ -35,7 +35,7 @@
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/ic_action_scan"
             android:id="@+id/scanBtn"/>
         <TextView
@@ -43,13 +43,13 @@
             android:layout_height="wrap_content"
             android:text="Scan"
             android:layout_below="@+id/scanBtn"
-            android:layout_marginLeft="45dp"/>
+            android:layout_marginLeft="28dp"/>
 
         <ImageView
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/scanBtn"
             android:src="@drawable/ic_action_add"
             android:id="@+id/addBtn"/>
@@ -60,13 +60,13 @@
             android:text="Add"
             android:layout_below="@+id/addBtn"
             android:layout_toRightOf="@+id/scanBtn"
-            android:layout_marginLeft="45dp"/>
+            android:layout_marginLeft="28dp"/>
 
         <ImageView
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/ic_action_delete"
             android:layout_toRightOf="@+id/addBtn"
             android:id="@+id/deleteBtn"/>
@@ -77,13 +77,13 @@
             android:text="Delete"
             android:layout_below="@+id/deleteBtn"
             android:layout_toRightOf="@+id/addBtn"
-            android:layout_marginLeft="40dp"/>
+            android:layout_marginLeft="26.5dp"/>
 
         <ImageView
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/ic_action_view"
             android:layout_toRightOf="@+id/deleteBtn"
             android:id="@+id/viewBtn"/>
@@ -94,7 +94,24 @@
             android:text="View"
             android:layout_below="@+id/viewBtn"
             android:layout_toRightOf="@+id/deleteBtn"
-            android:layout_marginLeft="45dp"/>
+            android:layout_marginLeft="28dp"/>
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_action_recipe"
+            android:layout_toRightOf="@+id/viewBtn"
+            android:id="@+id/recipeBtn"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recipe"
+            android:layout_below="@+id/recipeBtn"
+            android:layout_toRightOf="@+id/viewBtn"
+            android:layout_marginLeft="33dp"/>
 
 
     </RelativeLayout>
