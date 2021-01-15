@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.grocerymanager">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryManager">
-        <activity android:name=".Register"></activity>
+        <activity android:name=".Notification_ON_time"></activity>
+        <activity android:name=".Register" />
         <activity android:name=".Login" />
         <activity android:name=".Welcome">
             <intent-filter>
@@ -25,6 +29,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Lunch_activity"/>
+        <receiver android:name=".Notification_receiver_lunch"/>
+        <activity android:name=".Breakfast_activity"/>
+        <receiver android:name=".Notification_receiver_break"/>
+        <activity android:name=".Dinner_activity"/>
+        <receiver android:name=".Notification_receiver_Dinner"/>
+
     </application>
 
 </manifest>
