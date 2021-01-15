@@ -77,12 +77,22 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Already have an account. Login now"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:id="@+id/loginNavi"
+        android:layout_above="@+id/signupBtn"
+        android:layout_below="@+id/loginLayout"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="Sign Up"
         android:fontFamily="@font/montserratregular"
         android:id="@+id/registerBtn"
@@ -94,7 +104,7 @@
         style="?android:attr/progressBarStyle"
         android:id="@+id/progressBar"
         android:visibility="invisible"
-        android:layout_below="@+id/loginBtn"
+        android:layout_below="@+id/registerBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"/>
 
