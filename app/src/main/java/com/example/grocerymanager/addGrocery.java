@@ -107,8 +107,9 @@ public class addGrocery extends AppCompatActivity {
                 String types = type.getLayout().getText().toString();
                 Integer quantities = Integer.valueOf(quantity.getLayout().getText().toString());
                 String exp_date = expdate.getText().toString();
+                String image = String.valueOf(imguri);
 
-                grocery helperClass = new grocery(name,types,quantities,exp_date);
+                grocery helperClass = new grocery(name,types,quantities,exp_date,image);
                 reference.child(name).setValue(helperClass);
                 //reference = rootNode.getReference(name).setValue(helperClass);
 
@@ -116,8 +117,8 @@ public class addGrocery extends AppCompatActivity {
                 if(uploadTask != null && uploadTask.isInProgress())
                 {}else {Fileuploader();}
 
-                //Intent nextpage = new Intent(addGrocery.this,listGrocery.class);
-                //startActivity(nextpage);
+                Intent nextpage = new Intent(addGrocery.this,listGrocery.class);
+                startActivity(nextpage);
             }
         });
     }
