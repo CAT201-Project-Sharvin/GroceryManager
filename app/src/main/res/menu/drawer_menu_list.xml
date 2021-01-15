@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Grocery">
+        <menu>
+            <item android:title="List Items"
+                android:icon="@drawable/ic_baseline_folder_24" />
+            <item android:title="Add Items"
+                android:icon="@drawable/ic_baseline_people_24" />
+            <item android:title="View Items"
+                android:icon="@drawable/ic_baseline_star_24" />
+            <item android:title="Delete Items"
+                android:icon="@drawable/ic_baseline_access_time_24" />
+        </menu>
+    </item>
+
+    <item android:title="Recipe">
+        <menu>
+            <item android:title="Breakfast"
+                android:icon="@drawable/ic_baseline_settings_applications_24" />
+            <item android:title="Lunch"
+                android:icon="@drawable/ic_baseline_power_settings_new_24" />
+            <item android:title="Dinner"
+                android:icon="@drawable/ic_baseline_power_settings_new_24" />
+        </menu>
+    </item>
+
+    <item android:title="Settings">
+        <menu>
+            <item android:title="Notifications"
+                android:icon="@drawable/ic_baseline_settings_applications_24" />
+            <item android:title="Log Out"
+                android:icon="@drawable/ic_baseline_power_settings_new_24" />
+        </menu>
+    </item>
+
+</menu>
