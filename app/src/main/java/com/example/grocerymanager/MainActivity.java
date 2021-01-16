@@ -14,9 +14,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -39,7 +45,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    View headerView;
+    DatabaseReference ref;
+    FirebaseAuth fAuth;
     ImageView registerBtn, addBtn, scanBtn, deleteBtn, viewBtn, recipeBtn;
+    TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +59,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawerLayout);
+
         navigationView = findViewById(R.id.navi_view);
+        headerView = navigationView.getHeaderView(0);
         addBtn = findViewById(R.id.addBtn);
         viewBtn = findViewById(R.id.viewBtn);
+        userName = headerView.findViewById(R.id.userName);
+        fAuth = FirebaseAuth.getInstance();
+        ref = FirebaseDatabase.getInstance().getReference().child("Users").child(fAuth.getCurrentUser().getUid());
 
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("username", snapshot.child("userName").getValue().toString());
+                String name = snapshot.child("userName").getValue().toString();
+                userName.setText(name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
@@ -65,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         loadCards();
+
+
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +176,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+       switch(item.getItemId()){
+           case R.id.adding_items:
+               startActivity(new Intent(getApplicationContext(), addGrocery.class));
+               break;
+           case R.id.viewing_items:
+               startActivity(new Intent(getApplicationContext(), listGrocery.class));
+               break;
+           case R.id.log_out:
+               FirebaseAuth.getInstance().signOut();
+               startActivity(new Intent(getApplicationContext(), Login.class));
+               break;
+
+       }
         return false;
     }
 
