@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:layout_marginTop="10dp"
         android:id="@+id/image_view"
-        android:src="@drawable/ic_action_name"/>
+        android:src="@drawable/ic_grocery_name"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
