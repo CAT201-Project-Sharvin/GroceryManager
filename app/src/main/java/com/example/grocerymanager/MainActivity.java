@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference(fAuth.getCurrentUser().getUid());
 
-       /* ref.addValueEventListener(new ValueEventListener() {
+       ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d("username", snapshot.child("userName").getValue().toString());
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        }); */
+        });
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
