@@ -19,8 +19,8 @@ public class Notification_receiver_Dinner extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"dinner")
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(android.R.drawable.ic_notification_overlay)
-                .setContentTitle("YOU ARE NOTIFIED ")
-                .setContentText("Dinner ready")
+                .setContentTitle("ITS DINNER TIME ")
+                .setContentText("PEEK HERE FOR DINNER SUGGESTIONS")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 

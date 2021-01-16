@@ -19,8 +19,8 @@ public class Notification_receiver_break extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"break")
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(android.R.drawable.ic_notification_overlay)
-                .setContentTitle("YOU ARE NOTIFIED ")
-                .setContentText("Breakfast ready")
+                .setContentTitle("GOOD MORNING")
+                .setContentText("START YOUR DAY WITH COOL BREAKFAST SUGGESTIONS ")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
