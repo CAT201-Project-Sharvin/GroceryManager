@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerView = navigationView.getHeaderView(0);
         addBtn = findViewById(R.id.addBtn);
         viewBtn = findViewById(R.id.viewBtn);
+        recipeBtn = findViewById(R.id.recipeBtn);
         userName = headerView.findViewById(R.id.userName);
         fAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference(fAuth.getCurrentUser().getUid());
@@ -121,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), listGrocery.class));
+            }
+        });
+
+        recipeBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Recipe.class));
             }
         });
     }
