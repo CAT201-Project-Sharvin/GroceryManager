@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:title="Grocery">
         <menu>
-            <item android:title="List Items"
-                android:icon="@drawable/ic_baseline_folder_24" />
             <item android:title="Add Items"
-                android:icon="@drawable/ic_baseline_people_24" />
+                android:icon="@drawable/ic_action_add" />
             <item android:title="View Items"
-                android:icon="@drawable/ic_baseline_star_24" />
+                android:icon="@drawable/ic_action_view" />
             <item android:title="Delete Items"
-                android:icon="@drawable/ic_baseline_access_time_24" />
+                android:icon="@drawable/ic_action_delete" />
         </menu>
     </item>
 
     <item android:title="Recipe">
         <menu>
             <item android:title="Breakfast"
-                android:icon="@drawable/ic_baseline_settings_applications_24" />
+                android:icon="@drawable/ic_action_breakfast" />
             <item android:title="Lunch"
-                android:icon="@drawable/ic_baseline_power_settings_new_24" />
+                android:icon="@drawable/ic_action_lunch" />
             <item android:title="Dinner"
-                android:icon="@drawable/ic_baseline_power_settings_new_24" />
+                android:icon="@drawable/ic_action_dinner" />
         </menu>
     </item>
 
     <item android:title="Settings">
         <menu>
             <item android:title="Notifications"
-                android:icon="@drawable/ic_baseline_settings_applications_24" />
+                android:icon="@drawable/ic_action_notification"
+                app:actionLayout="@layout/toggle_switch_layout"/>
             <item android:title="Log Out"
-                android:icon="@drawable/ic_baseline_power_settings_new_24" />
+                android:icon="@drawable/ic_action_login" />
         </menu>
     </item>
 
