@@ -43,8 +43,11 @@
         <receiver android:name=".Notification_receiver_Dinner" />
         <activity android:name=".DetailsRecipe"/>
         <activity android:name=".Recipe" />
+
       
-      <activity android:name=".updateGrocery"/>
+      
+      
+        <activity android:name=".updateGrocery"/>
         <activity android:name=".viewGrocery"/>
         <activity android:name=".listGrocery"/>
         <activity android:name=".addGrocery"/>
