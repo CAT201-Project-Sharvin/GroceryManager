@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class viewGrocery extends AppCompatActivity {
 
@@ -40,14 +42,11 @@ public class viewGrocery extends AppCompatActivity {
         final String expiry = getIntent().getStringExtra("grocery_expiry");
         final String quantity = getIntent().getStringExtra("grocery_quantity");
 
-        String temp = image;
-
         name1.setText(name);
         type1.setText(type);
         quantity1.setText(quantity);
         date1.setText(expiry);
         Glide.with(this).load(image).into(groceryImage);
-        Log.d("link",image);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)
@@ -68,8 +67,8 @@ public class viewGrocery extends AppCompatActivity {
                 DatabaseReference data = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list").child(name);
                 data.removeValue();
 
-                //StorageReference deleteimage = FirebaseStorage.getInstance().getReferenceFromUrl(temp);
-                //deleteimage.delete();
+                StorageReference deleteimage = FirebaseStorage.getInstance().getReferenceFromUrl(image);
+                deleteimage.delete();
 
                 Intent nextpage = new Intent(viewGrocery.this,listGrocery.class);
                 startActivity(nextpage);
