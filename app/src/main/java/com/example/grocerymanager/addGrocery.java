@@ -4,13 +4,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -29,8 +33,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class addGrocery extends AppCompatActivity {
     EditText grocery_name;
@@ -45,9 +51,12 @@ public class addGrocery extends AppCompatActivity {
 
     StorageReference nStorageRef;
     public Uri imguri;
+    public Bitmap imguri2;
     private StorageTask uploadTask;
 
     String TAG = "MainActivity" ;
+
+    Integer uptake = 0;
 
     DatePickerDialog.OnDateSetListener date;
 
@@ -69,9 +78,23 @@ public class addGrocery extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Filechooser();
+
+                AlertDialog.Builder askUser = new AlertDialog.Builder(addGrocery.this);
+                askUser.setCancelable(false).setPositiveButton("Upload Picture", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Filechooser();
+                    }
+                }).setNegativeButton("Take Picture", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        takeimage();
+                    }
+                });
+                askUser.show();
             }
         });
+
 
         expdate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -111,20 +134,48 @@ public class addGrocery extends AppCompatActivity {
                 Integer quantities = Integer.valueOf(quantity.getLayout().getText().toString());
                 String exp_date = expdate.getText().toString();
 
-                StorageReference Ref=nStorageRef.child(System.currentTimeMillis()+"," + getExtension(imguri));
-                uploadTask=Ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String image = String.valueOf(uri);
-                                grocery helperClass = new grocery(name,types,quantities,exp_date,image);
-                                reference.child(name).setValue(helperClass);
-                            }
-                        });
-                    }
-                });
+                if (uptake == 1)
+                {
+                    StorageReference Ref=nStorageRef.child(System.currentTimeMillis()+"," + getExtension(imguri));
+                    uploadTask=Ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String image = String.valueOf(uri);
+                                    grocery helperClass = new grocery(name,types,quantities,exp_date,image);
+                                    reference.child(name).setValue(helperClass);
+                                }
+                            });
+                        }
+                    });
+                }
+                else if (uptake == 2)
+                {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imguri2.compress(Bitmap.CompressFormat.JPEG,100,baos);
+
+                    final String URL = UUID.randomUUID().toString();
+                    StorageReference imageRef = nStorageRef.child(URL);
+
+                    byte[] b =baos.toByteArray();
+                    imageRef.putBytes(b).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String image = String.valueOf(uri);
+                                    grocery helperClass = new grocery(name,types,quantities,exp_date,image);
+                                    reference.child(name).setValue(helperClass);
+                                }
+                            });
+                        }
+                    });
+
+                }
+
 
                 Intent nextpage = new Intent(addGrocery.this,listGrocery.class);
                 startActivity(nextpage);
@@ -146,6 +197,12 @@ public class addGrocery extends AppCompatActivity {
         startActivityForResult(intent,100);
     }
 
+    private void takeimage(){
+        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,200);
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -154,6 +211,13 @@ public class addGrocery extends AppCompatActivity {
         {
             imguri=data.getData();
             imageView.setImageURI(imguri);
+            uptake = 1;
+        }
+        else if(requestCode == 200 && resultCode==RESULT_OK)
+        {
+            imguri2=(Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(imguri2);
+            uptake = 2;
         }
     }
 }
