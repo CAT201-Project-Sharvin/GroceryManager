@@ -1,8 +1,5 @@
 package com.example.grocerymanager;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -19,6 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +30,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
 
-public class updateGrocery extends AppCompatActivity {
+public class updateImageGrocery extends AppCompatActivity {
 
     EditText et_grocery_name;
     EditText et_type;
@@ -38,7 +38,7 @@ public class updateGrocery extends AppCompatActivity {
     ImageView imageView;
     TextView et_expdate;
 
-    Button cancel,update;
+    Button cancel, update;
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
@@ -54,18 +54,18 @@ public class updateGrocery extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_grocery);
+        setContentView(R.layout.activity_update_image_grocery);
 
         et_expdate = (TextView) findViewById(R.id.et_expdate);
         et_grocery_name = findViewById(R.id.et_grocery_name);
         et_type = findViewById(R.id.et_type);
-        et_quantity=findViewById(R.id.et_quantity);
+        et_quantity = findViewById(R.id.et_quantity);
         imageView = findViewById(R.id.image_view);
 
         update = findViewById(R.id.et_update);
         cancel = findViewById(R.id.et_cancel);
 
-        nStorageRef= FirebaseStorage.getInstance().getReference("Images");
+        nStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
         final String image = getIntent().getStringExtra("image_uri");
         final String name = getIntent().getStringExtra("grocery_name");
@@ -79,22 +79,12 @@ public class updateGrocery extends AppCompatActivity {
         et_quantity.setText(quantity);
         et_expdate.setText(expiry);
 
-        imageView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent nextpage = new Intent(updateGrocery.this,updateImageGrocery.class);
-                nextpage.putExtra("grocery_name", name);
-                nextpage.putExtra("grocery_type", type);
-                nextpage.putExtra("grocery_expiry", expiry);
-                nextpage.putExtra("grocery_quantity", String.valueOf(quantity));
-                nextpage.putExtra("image_uri", image);
-                startActivity(nextpage);
-            }
-        });
+        Filechooser();
 
         update.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view)
-            {
+            @Override
+            public void onClick(View view) {
+
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("grocery_list");
 
@@ -107,57 +97,96 @@ public class updateGrocery extends AppCompatActivity {
                 DatabaseReference data = FirebaseDatabase.getInstance().getReference("grocery_list").child(name);
                 data.removeValue();
 
-                grocery helperClass = new grocery(edited_name,edited_type,edited_quantity,edited_date,edited_image);
-                reference.child(edited_name).setValue(helperClass);
+                StorageReference deleteimage = FirebaseStorage.getInstance().getReferenceFromUrl(image);
+                deleteimage.delete();
 
-                Intent nextpage = new Intent(updateGrocery.this,viewGrocery.class);
-                nextpage.putExtra("grocery_name", edited_name);
-                nextpage.putExtra("grocery_type", edited_type);
-                nextpage.putExtra("grocery_expiry", edited_date);
-                nextpage.putExtra("grocery_quantity", String.valueOf(edited_quantity));
-                nextpage.putExtra("image_uri", edited_image);
-                startActivity(nextpage);
+                StorageReference Ref = nStorageRef.child(System.currentTimeMillis() + "," + getExtension(imguri));
+                uploadTask = Ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String newimage = String.valueOf(uri);
+                                grocery helperClass = new grocery(edited_name, edited_type, edited_quantity, edited_date, newimage);
+                                reference.child(edited_name).setValue(helperClass);
+
+                                Intent nextpage = new Intent(updateImageGrocery.this, viewGrocery.class);
+                                nextpage.putExtra("grocery_name", edited_name);
+                                nextpage.putExtra("grocery_type", edited_type);
+                                nextpage.putExtra("grocery_expiry", edited_date);
+                                nextpage.putExtra("grocery_quantity", String.valueOf(edited_quantity));
+                                nextpage.putExtra("image_uri", newimage);
+                                startActivity(nextpage);
+                            }
+                        });
+                    }
+                });
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view)
-            {
-                Intent nextpage = new Intent(updateGrocery.this,viewGrocery.class);
+            @Override
+            public void onClick(View view) {
+                Intent nextpage = new Intent(updateImageGrocery.this, viewGrocery.class);
                 nextpage.putExtra("grocery_name", name);
                 nextpage.putExtra("grocery_type", type);
                 nextpage.putExtra("grocery_expiry", expiry);
                 nextpage.putExtra("grocery_quantity", quantity);
-                nextpage.putExtra("image_uri",image);
+                nextpage.putExtra("image_uri", image);
                 startActivity(nextpage);
             }
         });
 
-        et_expdate.setOnClickListener(new View.OnClickListener(){
+        et_expdate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(updateGrocery.this,
+                DatePickerDialog dialog = new DatePickerDialog(updateImageGrocery.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth,
-                        date, year,month,day);
+                        date, year, month, day);
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
 
-        date=new DatePickerDialog.OnDateSetListener(){
+        date = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day){
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month += 1;
-                Log.d(TAG,"onDateSet: mm/dd/yyy: "+ month + "/" + day + "/" +year);
+                Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
                 String date = day + "/" + month + "/" + year;
                 et_expdate.setText(date);
             }
         };
+    }
+
+    private String getExtension(Uri uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType((cr.getType(uri)));
+    }
+
+
+    private void Filechooser() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, 100);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imguri = data.getData();
+            imageView.setImageURI(imguri);
+        }
     }
 }
