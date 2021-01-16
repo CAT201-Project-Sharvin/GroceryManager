@@ -20,7 +20,7 @@ public class Notification_receiver_exp extends BroadcastReceiver {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
              //   .setAutoCancel(true);
       //  notificationManager.notify(400, builder.build());
-        Intent notionce = new Intent(context,Expiry_activity.class);
+        Intent notionce = new Intent(context,Expiry_activity.class);//Direct to Katheraven Line
         notionce.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
