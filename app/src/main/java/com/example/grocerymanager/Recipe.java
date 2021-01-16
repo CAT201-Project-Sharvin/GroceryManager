@@ -1,5 +1,6 @@
 package com.example.grocerymanager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,12 +12,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -35,14 +48,14 @@ public class Recipe extends AppCompatActivity {
     DinnerFoodAdapter dinnerFoodAdapter;
     String searchCharacter = "chicken";
     String breakfastMain = "https://api.spoonacular.com/recipes/complexSearch?query=meat&type=breakfast&number=10&apiKey=fde780bf140e4dbbaefd90ab69e3d459";
-    String randomRecipe = "https://api.spoonacular.com/recipes/complexSearch?query=";
-    String apiKey = "&apiKey=fde780bf140e4dbbaefd90ab69e3d459";
+    String randomRecipe = "https://api.spoonacular.com/recipes/complexSearch?includeIngredients=";
+    String apiKey = "&apiKey=c8732c3194ed40ff836baba74e53e4d9";
     String type, query, number;
     List<PopularFoods> popularFoodList;
     List<BreakfastFood> breakfastFoodList;
     List<LunchFood> lunchFoodList;
     List<DinnerFood> dinnerFoodList;
-
+    ArrayList<String> ingredientsList;
 
     protected void parsePopular(JSONArray result) throws JSONException {
 
@@ -122,7 +135,7 @@ public class Recipe extends AppCompatActivity {
         breakfastFoodList = new ArrayList<>();
         lunchFoodList = new ArrayList<>();
         dinnerFoodList = new ArrayList<>();
-
+        fetchIngredients();
 
 
         Log.v("tittle", "toyaaaaa");
@@ -217,11 +230,21 @@ public class Recipe extends AppCompatActivity {
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
+                            query = "";
                             JSONObject reader = new JSONObject(responseString);
                             JSONArray result = reader.getJSONArray("results");
                             Log.v("response", responseString);
                             parsePopular(result);
-                            query="cereal";
+                            if(!ingredientsList.isEmpty()){
+                                for(int i=0;i<ingredientsList.size();i++)
+                                {
+                                    query=query+ingredientsList.get(i).toString()+",+";
+                                }
+                            }
+                            else{
+                                query="cereal";
+                            }
+
                             type="breakfast";
                             number="3";
                             String fullApi = randomRecipe +query+"&type="+type+"&number="+number+ apiKey;
@@ -279,11 +302,20 @@ public class Recipe extends AppCompatActivity {
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
+                            query = "";
                             JSONObject reader = new JSONObject(responseString);
                             JSONArray result = reader.getJSONArray("results");
                             Log.v("response", responseString);
                             parseBreakfast(result);
-                            query="meat";
+                            if(!ingredientsList.isEmpty()){
+                                for(int i=0;i<ingredientsList.size();i++)
+                                {
+                                    query=query+ingredientsList.get(i).toString()+",+";
+                                }
+                            }
+                            else {
+                                query = "meat";
+                            }
                             type="lunch";
                             number="3";
                             String fullApi = randomRecipe +query+"&type="+type+"&number="+number+ apiKey;
@@ -341,13 +373,21 @@ public class Recipe extends AppCompatActivity {
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
+                            query = "";
                             JSONObject reader = new JSONObject(responseString);
                             JSONArray result = reader.getJSONArray("results");
                             Log.v("response", responseString);
 
                             parseLunch(result);
-
-                            query="chicken";
+                            if(!ingredientsList.isEmpty()){
+                                for(int i=0;i<ingredientsList.size();i++)
+                                {
+                                    query=query+ingredientsList.get(i).toString()+",+";
+                                }
+                            }
+                            else {
+                                query = "chicken";
+                            }
                             type="dinner";
                             number="3";
                             String fullApi = randomRecipe +query+"&type="+type+"&number="+number+ apiKey;
@@ -439,5 +479,37 @@ public class Recipe extends AppCompatActivity {
             }
         });
     }
+    public void fetchIngredients(){
+        ingredientsList = new ArrayList<>();
 
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
+        ref.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                final grocery gro_list = dataSnapshot.getValue(grocery.class);
+                                    String txt = gro_list.getName();
+                                    ingredientsList.add(txt);
+                                    //GroceryItems = new grocery(txt, ty, Integer.valueOf(quan), exp, img);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }){}.start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }
