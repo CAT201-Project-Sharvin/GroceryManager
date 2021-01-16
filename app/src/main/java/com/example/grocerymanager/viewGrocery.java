@@ -2,6 +2,7 @@ package com.example.grocerymanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,6 +46,7 @@ public class viewGrocery extends AppCompatActivity {
         quantity1.setText(quantity);
         date1.setText(expiry);
         Glide.with(this).load(image).into(groceryImage);
+        Log.d("link",image);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)

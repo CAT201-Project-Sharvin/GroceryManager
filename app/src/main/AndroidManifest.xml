@@ -53,6 +53,7 @@
         <activity android:name=".viewGrocery"/>
         <activity android:name=".listGrocery"/>
         <activity android:name=".addGrocery"/>
+        <activity android:name=".updateImageGrocery"/>
     </application>
 
 </manifest>

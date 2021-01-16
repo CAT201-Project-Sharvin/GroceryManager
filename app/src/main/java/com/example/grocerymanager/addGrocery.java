@@ -1,5 +1,8 @@
 package com.example.grocerymanager;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
@@ -17,16 +20,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class addGrocery extends AppCompatActivity {
     EditText grocery_name;
@@ -43,7 +46,7 @@ public class addGrocery extends AppCompatActivity {
     public Uri imguri;
     private StorageTask uploadTask;
 
-    String TAG = "MainActivity";
+    String TAG = "MainActivity" ;
 
     DatePickerDialog.OnDateSetListener date;
 
@@ -99,7 +102,6 @@ public class addGrocery extends AppCompatActivity {
         store.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)
             {
-
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("grocery_list");
 
@@ -107,15 +109,21 @@ public class addGrocery extends AppCompatActivity {
                 String types = type.getLayout().getText().toString();
                 Integer quantities = Integer.valueOf(quantity.getLayout().getText().toString());
                 String exp_date = expdate.getText().toString();
-                String image = String.valueOf(imguri);
 
-                grocery helperClass = new grocery(name,types,quantities,exp_date,image);
-                reference.child(name).setValue(helperClass);
-                //reference = rootNode.getReference(name).setValue(helperClass);
-
-
-                if(uploadTask != null && uploadTask.isInProgress())
-                {}else {Fileuploader();}
+                StorageReference Ref=nStorageRef.child(System.currentTimeMillis()+"," + getExtension(imguri));
+                uploadTask=Ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String image = String.valueOf(uri);
+                                grocery helperClass = new grocery(name,types,quantities,exp_date,image);
+                                reference.child(name).setValue(helperClass);
+                            }
+                        });
+                    }
+                });
 
                 Intent nextpage = new Intent(addGrocery.this,listGrocery.class);
                 startActivity(nextpage);
@@ -129,15 +137,11 @@ public class addGrocery extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType((cr.getType(uri)));
     }
 
-    private void Fileuploader()
-    {
-        StorageReference Ref=nStorageRef.child(System.currentTimeMillis()+"," + getExtension(imguri));
-        uploadTask=Ref.putFile(imguri);
-    }
+
     private void Filechooser(){
         Intent intent=new Intent();
-        intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
         startActivityForResult(intent,100);
     }
 
