@@ -1,6 +1,7 @@
 package com.example.grocerymanager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.IpSecManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,14 +31,24 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView cardsRecycler;
+    RecyclerView expiryRecycler;
     tutorialCardsAdapter TutorialCardAdapter;
+    expGroceryAdapter ExpGroceryAdapter;
     List<Tutorials> tutorialsList;
+    List<grocery> expiredItems;
+    grocery GroceryItems;
     ArrayList<String> Steps;
     String stepsURL [] ={"how-to-beat-egg-whites", "how-to-cook-basmati-rice",
             "how-to-cook-pasta", "how-to-cook-salmon", "how-to-fry-a-steak",
@@ -92,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        loadExpItems();
         loadCards();
 
 
@@ -110,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
 
     public void btnClick(View view) {
         FirebaseAuth.getInstance().signOut();
@@ -139,8 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         int totalSteps = (steps.select("li")).size();
                         Log.d("Number of items", String.valueOf(numSteps));
                         Log.d("total steps", String.valueOf(totalSteps));
-                        //Log.d("Title", title);
-                        //popularFoodList = new ArrayList<>();
                         Steps = new ArrayList<>();
                         for (int j = 0; j < totalSteps; j++) {
                             Steps.add(steps.select("li").eq(j).text());
@@ -165,14 +176,84 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }){}.start();
     }
 
+    public void loadExpItems(){
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
+        ref.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                SimpleDateFormat dateStructure = new SimpleDateFormat("dd/MM/yyyy");
+
+                new Thread(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run() {
+                        try {
+                            expiredItems = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                final grocery gro_list = dataSnapshot.getValue(grocery.class);
+                                LocalDate date = LocalDate.now();
+                                String cDate = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                                String oDate = gro_list.getDate();
+                                Date dateObj1 = dateStructure.parse(cDate);
+                                Date dateObj2 = dateStructure.parse(oDate);
+                                long diff = dateObj2.getTime() - dateObj1.getTime();
+                                int diffDays = (int) (diff/(24 * 60 * 60 * 1000));
+                                if (diffDays<= 3) {
+                                    String txt = gro_list.getName();
+                                    String ty = gro_list.getType();
+                                    String quan = String.valueOf(gro_list.getQuantity());
+                                    String exp = gro_list.getDate();
+                                    String img = gro_list.getImageUri();
+                                    //GroceryItems = new grocery(txt, ty, Integer.valueOf(quan), exp, img);
+                                    expiredItems.add(gro_list);
+                                } else {
+                                    continue;
+                                }
+
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if (!expiredItems.isEmpty()) {
+                                            setExpiryRecycler(expiredItems);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } catch (NumberFormatException | ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }){}.start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public void setCardsRecycler(List<Tutorials> tutorialsList){
         cardsRecycler = findViewById(R.id.cards_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
         cardsRecycler.setLayoutManager(layoutManager);
-        //problem3
         TutorialCardAdapter = new tutorialCardsAdapter(this,tutorialsList);
         cardsRecycler.setAdapter(TutorialCardAdapter);
     }
+
+    public void setExpiryRecycler(List<grocery> expiredItems){
+        expiryRecycler = findViewById(R.id.expiry_recycler);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
+        expiryRecycler.setLayoutManager(layoutManager);
+        ExpGroceryAdapter = new expGroceryAdapter(this,expiredItems);
+        expiryRecycler.setAdapter(ExpGroceryAdapter);
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
