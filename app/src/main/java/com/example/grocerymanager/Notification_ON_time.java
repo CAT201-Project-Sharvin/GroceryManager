@@ -39,7 +39,13 @@ public class Notification_ON_time extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Breakfast Notification
+                Breakfast_Time();
+                Lunch_Time();
+                Dinner_Time();
+                Exp_Date();
+            }
+
+            private void Breakfast_Time(){
                 createNotificationChannel1();
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(Calendar.HOUR_OF_DAY, 7);
@@ -50,8 +56,9 @@ public class Notification_ON_time extends AppCompatActivity {
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplication(),100,intent,0);
                 AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar1.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+            }
 
-                //Lunch Notification
+            private void Lunch_Time(){
                 createNotificationChannel2();
                 Calendar calendar2 = Calendar.getInstance();
                 calendar2.set(Calendar.HOUR_OF_DAY, 11);
@@ -61,9 +68,9 @@ public class Notification_ON_time extends AppCompatActivity {
                 PendingIntent pendingIntent1= PendingIntent.getBroadcast(getApplication(),200,intent1,0);
                 AlarmManager alarmManager1 = (AlarmManager)getSystemService(ALARM_SERVICE);
                 alarmManager1.setRepeating(AlarmManager.RTC_WAKEUP,calendar2.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent1);
+            }
 
-
-                //Dinner Notification
+            private void Dinner_Time(){
                 createNotificationChannel3();
                 Calendar calendar3 = Calendar.getInstance();
                 calendar3.set(Calendar.HOUR_OF_DAY, 18);
@@ -73,16 +80,11 @@ public class Notification_ON_time extends AppCompatActivity {
                 PendingIntent pendingIntent2= PendingIntent.getBroadcast(getApplication(),300,intent2,0);
                 AlarmManager alarmManager2 = (AlarmManager)getSystemService(ALARM_SERVICE);
                 alarmManager2.setRepeating(AlarmManager.RTC_WAKEUP,calendar3.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent2);
+            }
 
-
-
+            private void Exp_Date(){
                 final ArrayList<String> list = new ArrayList();
-//                final ArrayList<String> type = new ArrayList();
                 final ArrayList<String> expiry = new ArrayList();
-//                final ArrayList<String> quantity = new ArrayList();
-//                final ArrayList<String> image = new ArrayList();
-
-                //Expiry Date Pop UP
                 String pattern = "mm/dd/yyyy";
                 @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat(pattern);
                 Date today = Calendar.getInstance().getTime();
@@ -123,6 +125,7 @@ public class Notification_ON_time extends AppCompatActivity {
                 });
 
             }
+
             private  void createNotificationChannel(){
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -174,6 +177,5 @@ public class Notification_ON_time extends AppCompatActivity {
             }
         });
     }
-
 
 }
