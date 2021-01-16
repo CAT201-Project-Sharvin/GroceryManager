@@ -27,3 +27,4 @@ public class Notification_receiver_Dinner extends BroadcastReceiver {
         notificationManager.notify(300, builder.build());
     }
 }
+
