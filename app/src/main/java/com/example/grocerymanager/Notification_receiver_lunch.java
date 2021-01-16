@@ -19,8 +19,8 @@ public class Notification_receiver_lunch extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"lunch")
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(android.R.drawable.ic_notification_overlay)
-                .setContentTitle("YOU ARE NOTIFIED ")
-                .setContentText("Lunch ready")
+                .setContentTitle("GOOD AFTERNOON")
+                .setContentText("DROP DOWN FOR LUNCH IDEAS")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
