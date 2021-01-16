@@ -82,7 +82,7 @@ public class updateGrocery extends AppCompatActivity {
                 reference = rootNode.getReference("grocery_list");
 
                 grocery helperClass = new grocery(edited_name,edited_type,edited_quantity,edited_date,image);
-                reference.child(name).setValue(helperClass);
+                reference.child(edited_name).setValue(helperClass);
 
                 Intent nextpage = new Intent(updateGrocery.this,viewGrocery.class);
                 nextpage.putExtra("grocery_name", edited_name);
