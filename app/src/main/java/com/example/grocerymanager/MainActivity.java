@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewBtn = findViewById(R.id.viewBtn);
         userName = headerView.findViewById(R.id.userName);
         fAuth = FirebaseAuth.getInstance();
-        ref = FirebaseDatabase.getInstance().getReference().child("Users").child(fAuth.getCurrentUser().getUid());
+        ref = FirebaseDatabase.getInstance().getReference(fAuth.getCurrentUser().getUid());
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
