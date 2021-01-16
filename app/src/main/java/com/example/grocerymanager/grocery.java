@@ -5,15 +5,17 @@ public class grocery {
     String type;
     Integer quantity;
     String date;
+    String imageUri;
 
     public grocery() {
     }
 
-    public grocery(String name, String type, Integer quantity, String date) {
+    public grocery(String name, String type, Integer quantity, String date, String imageUri) {
         this.name = name;
         this.type = type;
         this.quantity = quantity;
         this.date = date;
+        this.imageUri = imageUri;
     }
 
     public String getName() {
@@ -46,5 +48,13 @@ public class grocery {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }

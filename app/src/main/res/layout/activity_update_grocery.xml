@@ -6,16 +6,7 @@
     android:layout_height="match_parent"
     android:orientation = "vertical"
     android:gravity = "center"
-    tools:context=".addGrocery">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/round_edittext">
-    </LinearLayout>
+    tools:context=".updateGrocery">
 
     <ImageView
         android:layout_width="match_parent"
@@ -23,7 +14,7 @@
         android:layout_weight="1"
         android:layout_marginTop="10dp"
         android:id="@+id/image_view"
-        android:src="@drawable/ic_grocery_name"/>
+        android:src="@drawable/ic_action_name"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -82,7 +73,14 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:id="@+id/et_store"
-        android:hint="Add Item"/>
+        android:id="@+id/et_update"
+        android:hint="Update"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:id="@+id/et_cancel"
+        android:hint="Cancel"/>
 
 </LinearLayout>

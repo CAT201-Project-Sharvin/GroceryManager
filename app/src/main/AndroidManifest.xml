@@ -46,6 +46,13 @@
         <activity android:name=".Expiry_activity"/>
         <receiver android:name=".Notification_receiver_exp"/>
 
+      
+      
+      
+        <activity android:name=".updateGrocery"/>
+        <activity android:name=".viewGrocery"/>
+        <activity android:name=".listGrocery"/>
+        <activity android:name=".addGrocery"/>
     </application>
 
 </manifest>
