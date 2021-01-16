@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -64,7 +65,7 @@ public class viewGrocery extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)
             {
-                DatabaseReference data = FirebaseDatabase.getInstance().getReference("grocery_list").child(name);
+                DatabaseReference data = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list").child(name);
                 data.removeValue();
 
                 //StorageReference deleteimage = FirebaseStorage.getInstance().getReferenceFromUrl(temp);

@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -103,7 +104,7 @@ public class addGrocery extends AppCompatActivity {
             @Override public void onClick(View view)
             {
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("grocery_list");
+                reference = rootNode.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
 
                 String name = grocery_name.getLayout().getText().toString();
                 String types = type.getLayout().getText().toString();

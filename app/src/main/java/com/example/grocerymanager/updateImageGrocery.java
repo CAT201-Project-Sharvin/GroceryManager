@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -86,7 +87,7 @@ public class updateImageGrocery extends AppCompatActivity {
             public void onClick(View view) {
 
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("grocery_list");
+                reference = rootNode.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
 
                 String edited_name = et_grocery_name.getLayout().getText().toString();
                 String edited_type = et_type.getLayout().getText().toString();
@@ -94,7 +95,7 @@ public class updateImageGrocery extends AppCompatActivity {
                 String edited_date = et_expdate.getText().toString();
                 String edited_image = image;
 
-                DatabaseReference data = FirebaseDatabase.getInstance().getReference("grocery_list").child(name);
+                DatabaseReference data = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list").child(name);
                 data.removeValue();
 
                 StorageReference deleteimage = FirebaseStorage.getInstance().getReferenceFromUrl(image);
