@@ -1,14 +1,21 @@
 package com.example.grocerymanager;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.jsoup.Jsoup;
@@ -18,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView cardsRecycler;
     tutorialCardsAdapter TutorialCardAdapter;
@@ -29,23 +36,56 @@ public class MainActivity extends AppCompatActivity {
             "how-to-peel-and-deveine-a-prawn", "how-to-poach-an-egg",
             "how-to-prepare-an-avocado", "how-to-remove-tomato-skin",
             "how-to-zest-a-lemon"};
-
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    ImageView registerBtn, addBtn, scanBtn, deleteBtn, viewBtn, recipeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.drawer_toolbar);
+        setSupportActionBar(toolbar);
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navi_view);
+        addBtn = findViewById(R.id.addBtn);
+        viewBtn = findViewById(R.id.viewBtn);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.openNavDrawer,
+                R.string.closeNavDrawer
+        );
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
         loadCards();
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), addGrocery.class));
+            }
+        });
+
+        viewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), listGrocery.class));
+            }
+        });
     }
+
 
     public void btnClick(View view) {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(), Login.class));
     }
-
-  
-  
-  
 
     public void loadCards(){
         new Thread(new Runnable() {
@@ -102,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
         //problem3
         TutorialCardAdapter = new tutorialCardsAdapter(this,tutorialsList);
         cardsRecycler.setAdapter(TutorialCardAdapter);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
 
