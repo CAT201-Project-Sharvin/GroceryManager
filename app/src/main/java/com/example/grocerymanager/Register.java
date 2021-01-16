@@ -76,7 +76,7 @@ public class Register extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(Register.this, "User Created", Toast.LENGTH_SHORT).show();
                             user = new Users(name, fAuth.getCurrentUser().getUid());
-                            FirebaseDatabase.getInstance().getReference("Users").child(fAuth.getCurrentUser().getUid()).setValue(user);
+                            FirebaseDatabase.getInstance().getReference().child(fAuth.getCurrentUser().getUid()).setValue(user);
                             Log.d("User Id", fAuth.getCurrentUser().getUid());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
