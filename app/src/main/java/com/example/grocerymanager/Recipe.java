@@ -1,17 +1,32 @@
 package com.example.grocerymanager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.mbms.StreamingServiceInfo;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.grocerymanager.BreakfastFoodAdapter;
+import com.example.grocerymanager.DinnerFoodAdapter;
+import com.example.grocerymanager.LunchFoodAdapter;
+import com.example.grocerymanager.popularFoodAdapter;
+import com.example.grocerymanager.BreakfastFood;
+import com.example.grocerymanager.DinnerFood;
+import com.example.grocerymanager.LunchFood;
+import com.example.grocerymanager.PopularFoods;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,12 +39,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -39,6 +50,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+
 public class Recipe extends AppCompatActivity {
 
     RecyclerView popularRecycler, breakfastRecycler, lunchRecycler, dinnerRecycler;
@@ -47,17 +59,24 @@ public class Recipe extends AppCompatActivity {
     LunchFoodAdapter lunchFoodAdapter;
     DinnerFoodAdapter dinnerFoodAdapter;
     String searchCharacter = "chicken";
-    String breakfastMain = "https://api.spoonacular.com/recipes/complexSearch?query=meat&type=breakfast&number=10&apiKey=fde780bf140e4dbbaefd90ab69e3d459";
+    //String breakfastMain = "https://api.spoonacular.com/recipes/complexSearch?query=meat&type=breakfast&number=10&apiKey=fde780bf140e4dbbaefd90ab69e3d459";
+    String breakfastMain = "https://api.spoonacular.com/recipes/complexSearch?query=meat&type=breakfast&number=10&apiKey=b07a52c682e244109a54eb58858235d3";
+    //String randomRecipe = "https://api.spoonacular.com/recipes/complexSearch?query=";
     String randomRecipe = "https://api.spoonacular.com/recipes/complexSearch?includeIngredients=";
-    String apiKey = "&apiKey=c8732c3194ed40ff836baba74e53e4d9";
+    //String apiKey = "&apiKey=fde780bf140e4dbbaefd90ab69e3d459";
+    String apiKey = "&apiKey=b07a52c682e244109a54eb58858235d3";
     String type, query, number;
     List<PopularFoods> popularFoodList;
     List<BreakfastFood> breakfastFoodList;
     List<LunchFood> lunchFoodList;
     List<DinnerFood> dinnerFoodList;
+
+    TabLayout tabLayout;
+    ViewPager viewPager;
     ArrayList<String> ingredientsList;
 
-    protected void parsePopular(JSONArray result) throws JSONException {
+
+    protected void parsePopular(JSONArray result) throws JSONException{
 
         popularFoodList = new ArrayList<>();
         for (int i = 0; i < result.length(); i++) {
@@ -124,18 +143,33 @@ public class Recipe extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        //tab changes
+        tabLayout = findViewById(R.id.tab_layout);
+        viewPager = findViewById(R.id.view_pager);
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.add("Popular");
+        arrayList.add("Breakfast");
+        arrayList.add("Lunch");
+        arrayList.add("Dinner");
+
+        prepareViewPager(viewPager ,arrayList );
+
+        tabLayout.setupWithViewPager(viewPager);
 
         popularFoodList = new ArrayList<>();
         breakfastFoodList = new ArrayList<>();
         lunchFoodList = new ArrayList<>();
         dinnerFoodList = new ArrayList<>();
         fetchIngredients();
+
 
 
         Log.v("tittle", "toyaaaaa");
@@ -150,8 +184,56 @@ public class Recipe extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
+    private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList) {
+        MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
+        BlankFragment fragment = new BlankFragment();
+
+        for(int i=0; i<arrayList.size(); i++){
+            Bundle bundle = new Bundle();
+            bundle.putString("title",arrayList.get(i));
+            fragment.setArguments(bundle);
+            adapter.addFragment(fragment,arrayList.get(i));
+            fragment = new BlankFragment();
+        }
+        //set adapter
+        viewPager.setAdapter(adapter);
+
+    }
+
+    private class MainAdapter extends FragmentPagerAdapter {
+        ArrayList<String> arrayList = new ArrayList<>();
+        List<Fragment> fragmentList = new ArrayList<>();
+
+        public void addFragment(Fragment fragment, String title){
+            arrayList.add(title);
+            fragmentList.add(fragment);
+        }
+
+        public MainAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return arrayList.get(position);
+        }
+    }
 
     //problem 1 minute 23:09
     private void setPopularRecycler(List<PopularFoods> popularFoodList) {
@@ -253,7 +335,6 @@ public class Recipe extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -479,6 +560,7 @@ public class Recipe extends AppCompatActivity {
             }
         });
     }
+
     public void fetchIngredients(){
         ingredientsList = new ArrayList<>();
 
@@ -495,9 +577,9 @@ public class Recipe extends AppCompatActivity {
                         try {
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 final grocery gro_list = dataSnapshot.getValue(grocery.class);
-                                    String txt = gro_list.getName();
-                                    ingredientsList.add(txt);
-                                    //GroceryItems = new grocery(txt, ty, Integer.valueOf(quan), exp, img);
+                                String txt = gro_list.getName();
+                                ingredientsList.add(txt);
+                                //GroceryItems = new grocery(txt, ty, Integer.valueOf(quan), exp, img);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -512,4 +594,7 @@ public class Recipe extends AppCompatActivity {
             }
         });
     }
+
+
+
 }
