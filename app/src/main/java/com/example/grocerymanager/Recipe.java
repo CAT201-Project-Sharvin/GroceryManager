@@ -138,7 +138,7 @@ public class Recipe extends AppCompatActivity {
         dinnerFoodList = new ArrayList<>();
         fetchIngredients();
 
-        button = (Button) findViewById(R.id.button);
+        button = (Button) findViewById(R.id.back_button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
