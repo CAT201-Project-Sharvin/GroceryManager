@@ -9,6 +9,6 @@ public class Lunch_activity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lunch_activity_layout);
+        setContentView(R.layout.activity_recipe);
     }
 }
