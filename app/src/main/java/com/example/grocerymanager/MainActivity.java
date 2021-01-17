@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.IpSecManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     View headerView;
     DatabaseReference ref;
     FirebaseAuth fAuth;
-    ImageView registerBtn, addBtn, scanBtn, deleteBtn, viewBtn, recipeBtn;
-    TextView userName;
+    ImageView registerBtn, addBtn, storeBtn, deleteBtn, viewBtn, recipeBtn;
+    TextView userName, ownerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,16 +80,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addBtn = findViewById(R.id.addBtn);
         viewBtn = findViewById(R.id.viewBtn);
         recipeBtn = findViewById(R.id.recipeBtn);
+        storeBtn = findViewById(R.id.storeBtn);
         userName = headerView.findViewById(R.id.userName);
+        ownerName =findViewById(R.id.owner);
         fAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference(fAuth.getCurrentUser().getUid());
 
        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("username", snapshot.child("userName").getValue().toString());
-                String name = snapshot.child("userName").getValue().toString();
-                userName.setText(name);
+                try {
+                    Log.d("username", snapshot.child("userName").getValue().toString());
+                    String name = snapshot.child("userName").getValue().toString();
+                    userName.setText(name);
+                    ownerName.setText(name + "'s");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -131,6 +139,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Recipe.class));
+            }
+        });
+
+        storeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewIntent = new Intent("android.intent.action.VIEW",
+                        Uri.parse("https://www.google.com/maps/search/nearest+grocery+store/@5.3968895,100.3159552,15z/data=!3m1!4b1"));
+                startActivity(viewIntent);
             }
         });
     }
@@ -273,7 +290,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                startActivity(new Intent(getApplicationContext(), addGrocery.class));
                break;
            case R.id.viewing_items:
+           case R.id.deleting_items:
                startActivity(new Intent(getApplicationContext(), listGrocery.class));
+               break;
+           case R.id.breakfast_view:
+           case R.id.lunch_view:
+           case R.id.dinner_view:
+               startActivity(new Intent(getApplicationContext(), Recipe.class));
                break;
            case R.id.log_out:
                FirebaseAuth.getInstance().signOut();

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-    <item android:title="Grocery">
+    <item android:title="Grocery" >
         <menu>
             <item android:title="Add Items"
                 android:id="@+id/adding_items"
@@ -30,7 +31,7 @@
         </menu>
     </item>
 
-    <item android:title="Settings">
+    <item android:title="Settings" >
         <menu>
             <item android:title="Notifications"
                 android:icon="@drawable/ic_notification"
