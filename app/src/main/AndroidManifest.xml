@@ -30,15 +30,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Lunch_activity" />
+        <activity android:name=".Notification_activity" />
 
         <receiver android:name=".Notification_receiver_lunch" />
 
-        <activity android:name=".Breakfast_activity" />
-
         <receiver android:name=".Notification_receiver_break" />
-
-        <activity android:name=".Dinner_activity" />
 
         <receiver android:name=".Notification_receiver_Dinner" />
         <activity android:name=".DetailsRecipe"/>

@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 public class Notification_receiver_lunch extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent repeating_intent = new Intent(context,Lunch_activity.class);
+        Intent repeating_intent = new Intent(context,Notification_activity.class);
         repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,200,repeating_intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
