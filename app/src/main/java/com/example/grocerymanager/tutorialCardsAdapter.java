@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class tutorialCardsAdapter extends RecyclerView.Adapter<tutorialCardsAdapter.tutorialCardViewHolder> {
-    Context context;
-    List<Tutorials> tutorialsList;
+    private Context context;
+    private List<Tutorials> tutorialsList;
 
     public tutorialCardsAdapter(Context context,List<Tutorials>tutorialsList){
         this.context=context;

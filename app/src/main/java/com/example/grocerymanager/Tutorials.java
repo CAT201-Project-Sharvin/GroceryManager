@@ -5,12 +5,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tutorials {
-    String title;
-    String shortDesc;
-    String imageUrl;
-    String videoID;
-    String thumbnailURL;
-    ArrayList<String> steps = new ArrayList<>();
+    private String title;
+    private String shortDesc;
+    private String imageUrl;
+    private String videoID;
+    private String thumbnailURL;
+    private ArrayList<String> steps = new ArrayList<>();
 
     public Tutorials(String title, String shortDesc, String imageUrl, ArrayList<String> steps) {
         this.title = title;

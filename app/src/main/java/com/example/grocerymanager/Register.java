@@ -22,12 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
 
-    com.google.android.material.textfield.TextInputEditText FullName, Email, Password;
-    Button RegisterBtn;
-    FirebaseAuth fAuth;
-    ProgressBar progressBar;
-    TextView loginNavigation;
-    Users user;
+    private com.google.android.material.textfield.TextInputEditText FullName, Email, Password;
+    private Button RegisterBtn;
+    private FirebaseAuth fAuth;
+    private ProgressBar progressBar;
+    private TextView loginNavigation;
+    private Users user;
 
 
     @Override

@@ -31,7 +31,7 @@ public class Welcome extends AppCompatActivity {
 
     private Button loginBtn;
     private Button signupBtn;
-    FirebaseAuth fAuth;
+    private FirebaseAuth fAuth;
 
 
     @Override

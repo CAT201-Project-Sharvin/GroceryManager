@@ -17,12 +17,12 @@ import java.util.ArrayList;
 
 public class TutorialSteps extends AppCompatActivity {
 
-    RecyclerView tutorialRecycler;
-    tutorialStepsAdapter TutorialStepsAdapter;
-    ArrayList<String> Steps;
-    String vID, vTitle, vDesc;
-    YouTubePlayerView videoView;
-    TextView title, desc;
+    private RecyclerView tutorialRecycler;
+    private tutorialStepsAdapter TutorialStepsAdapter;
+    private ArrayList<String> Steps;
+    private String vID, vTitle, vDesc;
+    private YouTubePlayerView videoView;
+    private TextView title, desc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -44,15 +44,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    RecyclerView cardsRecycler;
-    RecyclerView expiryRecycler;
-    tutorialCardsAdapter TutorialCardAdapter;
-    expGroceryAdapter ExpGroceryAdapter;
-    List<Tutorials> tutorialsList;
-    List<grocery> expiredItems;
-    grocery GroceryItems;
-    ArrayList<String> Steps;
-    String stepsURL [] ={"how-to-beat-egg-whites", "how-to-cook-basmati-rice",
+    private RecyclerView cardsRecycler;
+    private RecyclerView expiryRecycler;
+    private tutorialCardsAdapter TutorialCardAdapter;
+    private expGroceryAdapter ExpGroceryAdapter;
+    private List<Tutorials> tutorialsList;
+    private List<grocery> expiredItems;
+    private grocery GroceryItems;
+    private ArrayList<String> Steps;
+    private String stepsURL [] ={"how-to-beat-egg-whites", "how-to-cook-basmati-rice",
             "how-to-cook-pasta", "how-to-cook-salmon", "how-to-fry-a-steak",
             "how-to-peel-and-deveine-a-prawn", "how-to-poach-an-egg",
             "how-to-prepare-an-avocado", "how-to-remove-tomato-skin",
@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    View headerView;
-    DatabaseReference ref;
-    FirebaseAuth fAuth;
-    ImageView registerBtn, addBtn, storeBtn, deleteBtn, viewBtn, recipeBtn;
-    TextView userName, ownerName;
+    private View headerView;
+    private DatabaseReference ref;
+    private FirebaseAuth fAuth;
+    private ImageView registerBtn, addBtn, storeBtn, deleteBtn, viewBtn, recipeBtn;
+    private TextView userName, ownerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
