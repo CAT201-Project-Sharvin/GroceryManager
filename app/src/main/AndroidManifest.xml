@@ -50,7 +50,6 @@
       
       
         <activity android:name=".updateGrocery"/>
-        <activity android:name=".viewGrocery"/>
         <activity android:name=".listGrocery"/>
         <activity android:name=".addGrocery"/>
         <activity android:name=".updateImageGrocery"/>

@@ -3,8 +3,10 @@ package com.example.grocerymanager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -66,7 +68,7 @@ public class updateGrocery extends AppCompatActivity {
         update = findViewById(R.id.et_update);
         cancel = findViewById(R.id.et_cancel);
 
-        nStorageRef= FirebaseStorage.getInstance().getReference("Images");
+        nStorageRef= FirebaseStorage.getInstance().getReference("Images"); //going to the root in firebase storage where the image is stored
 
         final String image = getIntent().getStringExtra("image_uri");
         final String name = getIntent().getStringExtra("grocery_name");
@@ -74,15 +76,18 @@ public class updateGrocery extends AppCompatActivity {
         final String expiry = getIntent().getStringExtra("grocery_expiry");
         final String quantity = getIntent().getStringExtra("grocery_quantity");
 
-        Glide.with(this).load(image).into(imageView);
+        Glide.with(this).load(image).into(imageView); //displaying image in imageview using its url
         et_grocery_name.setText(name);
         et_type.setText(type);
         et_quantity.setText(quantity);
         et_expdate.setText(expiry);
 
+        //this activity only will work if user want to edit other info except for image
+        //if they click imageview they will be redirected to another page where they can edit image as well
         imageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                //sending info into updateImageGrocery activity.
                 Intent nextpage = new Intent(updateGrocery.this,updateImageGrocery.class);
                 nextpage.putExtra("grocery_name", name);
                 nextpage.putExtra("grocery_type", type);
@@ -93,6 +98,7 @@ public class updateGrocery extends AppCompatActivity {
             }
         });
 
+        //when user clicks update the old infos will be deleted and new infos will be stored in firebase.
         update.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)
             {
@@ -111,29 +117,21 @@ public class updateGrocery extends AppCompatActivity {
                 grocery helperClass = new grocery(edited_name,edited_type,edited_quantity,edited_date,edited_image);
                 reference.child(edited_name).setValue(helperClass);
 
-                Intent nextpage = new Intent(updateGrocery.this,viewGrocery.class);
-                nextpage.putExtra("grocery_name", edited_name);
-                nextpage.putExtra("grocery_type", edited_type);
-                nextpage.putExtra("grocery_expiry", edited_date);
-                nextpage.putExtra("grocery_quantity", String.valueOf(edited_quantity));
-                nextpage.putExtra("image_uri", edited_image);
+                Intent nextpage = new Intent(updateGrocery.this,listGrocery.class);
                 startActivity(nextpage);
             }
         });
 
+        //if user cancel update they will be redirected to page where they can view all the groceries
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view)
             {
-                Intent nextpage = new Intent(updateGrocery.this,viewGrocery.class);
-                nextpage.putExtra("grocery_name", name);
-                nextpage.putExtra("grocery_type", type);
-                nextpage.putExtra("grocery_expiry", expiry);
-                nextpage.putExtra("grocery_quantity", quantity);
-                nextpage.putExtra("image_uri",image);
+                Intent nextpage = new Intent(updateGrocery.this,listGrocery.class);
                 startActivity(nextpage);
             }
         });
 
+        //when date text view is clicked user can select new date
         et_expdate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -151,6 +149,7 @@ public class updateGrocery extends AppCompatActivity {
             }
         });
 
+        //setting date with date,month and year.
         date=new DatePickerDialog.OnDateSetListener(){
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day){

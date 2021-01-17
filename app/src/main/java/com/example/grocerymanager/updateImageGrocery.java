@@ -1,5 +1,9 @@
 package com.example.grocerymanager;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
@@ -19,9 +23,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -78,19 +79,21 @@ public class updateImageGrocery extends AppCompatActivity {
 
         nStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
+        //dreceiving data from updateGrocery activity.
         final String image = getIntent().getStringExtra("image_uri");
         final String name = getIntent().getStringExtra("grocery_name");
         final String type = getIntent().getStringExtra("grocery_type");
         final String expiry = getIntent().getStringExtra("grocery_expiry");
         final String quantity = getIntent().getStringExtra("grocery_quantity");
 
-        Glide.with(this).load(image).into(imageView);
+        Glide.with(this).load(image).into(imageView); //using image url to display it in image view
         et_grocery_name.setText(name);
         et_type.setText(type);
         et_quantity.setText(quantity);
         et_expdate.setText(expiry);
 
-        open();
+        open(); // this function is to prompt user whther they want to take picture or upload picture.
+        //the prompt will be automatically prompt when user enter the  updateImageActivity activity.
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,12 +109,12 @@ public class updateImageGrocery extends AppCompatActivity {
                 String edited_image = image;
 
                 DatabaseReference data = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list").child(name);
-                data.removeValue();
+                data.removeValue(); // to delete data from firebase realtime database
 
                 StorageReference deleteimage = FirebaseStorage.getInstance().getReferenceFromUrl(image);
-                deleteimage.delete();
+                deleteimage.delete(); // to delete image from firebase storage
 
-                if (uptake == 1)
+                if (uptake == 1) // user choose to upload picture
                 {
                     StorageReference Ref = nStorageRef.child(System.currentTimeMillis() + "," + getExtension(imguri));
                     uploadTask = Ref.putFile(imguri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -124,19 +127,14 @@ public class updateImageGrocery extends AppCompatActivity {
                                     grocery helperClass = new grocery(edited_name, edited_type, edited_quantity, edited_date, newimage);
                                     reference.child(edited_name).setValue(helperClass);
 
-                                    Intent nextpage = new Intent(updateImageGrocery.this, viewGrocery.class);
-                                    nextpage.putExtra("grocery_name", edited_name);
-                                    nextpage.putExtra("grocery_type", edited_type);
-                                    nextpage.putExtra("grocery_expiry", edited_date);
-                                    nextpage.putExtra("grocery_quantity", String.valueOf(edited_quantity));
-                                    nextpage.putExtra("image_uri", newimage);
+                                    Intent nextpage = new Intent(updateImageGrocery.this, listGrocery.class);
                                     startActivity(nextpage);
                                 }
                             });
                         }
                     });
                 }
-                else if (uptake == 2)
+                else if (uptake == 2) //user choose to take image using camera
                 {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imguri2.compress(Bitmap.CompressFormat.JPEG,100,baos);
@@ -153,14 +151,9 @@ public class updateImageGrocery extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     String newimage = String.valueOf(uri);
                                     grocery helperClass = new grocery(edited_name, edited_type, edited_quantity, edited_date, newimage);
-                                    reference.child(name).setValue(helperClass);
+                                    reference.child(edited_name).setValue(helperClass);
 
-                                    Intent nextpage = new Intent(updateImageGrocery.this, viewGrocery.class);
-                                    nextpage.putExtra("grocery_name", edited_name);
-                                    nextpage.putExtra("grocery_type", edited_type);
-                                    nextpage.putExtra("grocery_expiry", edited_date);
-                                    nextpage.putExtra("grocery_quantity", String.valueOf(edited_quantity));
-                                    nextpage.putExtra("image_uri", newimage);
+                                    Intent nextpage = new Intent(updateImageGrocery.this, listGrocery.class);
                                     startActivity(nextpage);
                                 }
                             });
@@ -171,20 +164,15 @@ public class updateImageGrocery extends AppCompatActivity {
 
             }
         });
-
+        //if want to cancel update user will redirected back to grocery viewing page.
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent nextpage = new Intent(updateImageGrocery.this, viewGrocery.class);
-                nextpage.putExtra("grocery_name", name);
-                nextpage.putExtra("grocery_type", type);
-                nextpage.putExtra("grocery_expiry", expiry);
-                nextpage.putExtra("grocery_quantity", quantity);
-                nextpage.putExtra("image_uri", image);
+                Intent nextpage = new Intent(updateImageGrocery.this, listGrocery.class);
                 startActivity(nextpage);
             }
         });
-
+        //click date textview to choose new date
         et_expdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,20 +201,21 @@ public class updateImageGrocery extends AppCompatActivity {
         };
     }
 
+    //finding image extension
     private String getExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType((cr.getType(uri)));
     }
 
-
+    //upllaoding image from gallery
     private void Filechooser() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, 100);
     }
-
+    //taking image directly from camera
     private void takeimage(){
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent,200);
@@ -248,7 +237,7 @@ public class updateImageGrocery extends AppCompatActivity {
         }
     }
 
-    public void open(){
+    public void open(){ //prompt box to ask user whther to get image from camera or gallery
         AlertDialog.Builder askUser = new AlertDialog.Builder(updateImageGrocery.this);
         askUser.setCancelable(false).setPositiveButton("Upload Picture", new DialogInterface.OnClickListener() {
             @Override
