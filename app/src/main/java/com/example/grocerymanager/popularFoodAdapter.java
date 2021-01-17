@@ -28,12 +28,8 @@ public class popularFoodAdapter extends RecyclerView.Adapter<popularFoodAdapter.
         this.popularFoodList=popularFoodList;
     }
 
-    //public popularFoodAdapter(MainActivity mainActivity, List<popularFood> popularFoodList) {
-    //}
-
     @NonNull
     @Override
-    //ada tukar line bawah ni *Public popularFoodAdapter.popularFoodViewHolder
     public popularFoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.popular_food_row_item,parent, false);
@@ -43,13 +39,13 @@ public class popularFoodAdapter extends RecyclerView.Adapter<popularFoodAdapter.
     @Override
     public void onBindViewHolder(@NonNull popularFoodAdapter.popularFoodViewHolder holder, final int position) {
         Picasso.get().load(popularFoodList.get(position).getImageUrl()).into(holder.foodImage);
-
         //  holder.foodImage.setImageResource(popularFoodList.get(position).getImageUrl());
         holder.name.setText(popularFoodList.get(position).getName());
         holder.rating.setText(popularFoodList.get(position).getRating());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Passing id and pic information when clicked to DetailsRecipe class when clicked
             public void onClick(View v) {
                 Intent i = new Intent(context, DetailsRecipe.class);
                 i.putExtra("id_recipe", popularFoodList.get(position).getId());
@@ -62,11 +58,12 @@ public class popularFoodAdapter extends RecyclerView.Adapter<popularFoodAdapter.
     }
 
     @Override
+    //Get size of food list
     public int getItemCount() {
         return popularFoodList.size();
     }
 
-    //problem2
+    // Connecting item to the respective ImageView and TextView
     public static final class popularFoodViewHolder extends RecyclerView.ViewHolder{
 
         ImageView foodImage;
