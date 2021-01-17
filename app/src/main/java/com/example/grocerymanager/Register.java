@@ -52,7 +52,7 @@ public class Register extends AppCompatActivity {
                 String email = Email.getText().toString().trim();
                 String password = Password.getText().toString().trim();
                 String name = FullName.getText().toString().trim();
-
+                //Validation for the fields during the signup process
                 if(TextUtils.isEmpty(email)){
                     Email.setError("Email is required");
                     return;
@@ -79,6 +79,7 @@ public class Register extends AppCompatActivity {
                             FirebaseDatabase.getInstance().getReference().child(fAuth.getCurrentUser().getUid()).setValue(user);
                             Log.d("User Id", fAuth.getCurrentUser().getUid());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                         }
                         else{
                             Toast.makeText(Register.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

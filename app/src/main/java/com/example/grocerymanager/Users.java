@@ -1,5 +1,5 @@
 package com.example.grocerymanager;
-
+//Stores the details of the user
 public class Users {
     private String userName;
     private String userID;

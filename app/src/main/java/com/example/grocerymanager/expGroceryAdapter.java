@@ -48,7 +48,7 @@ public class expGroceryAdapter extends RecyclerView.Adapter<expGroceryAdapter.ex
     public void onBindViewHolder(@NonNull expGroceryAdapter.expGroceryViewHolder holder, final int position) {
         Picasso.get().load(groceryList.get(position).getImageUri()).into(holder.expImage);
         holder.expName.setText(groceryList.get(position).getName());
-
+        //The following line of code will count the remaining days for the items to be expired
         SimpleDateFormat dateStructure = new SimpleDateFormat("dd/MM/yyyy");
         LocalDate date = LocalDate.now();
         String cDate = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));

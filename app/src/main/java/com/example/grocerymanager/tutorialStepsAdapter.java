@@ -20,33 +20,19 @@ public class tutorialStepsAdapter extends RecyclerView.Adapter<tutorialStepsAdap
     public tutorialStepsAdapter(Context context, ArrayList<String> steps){
         this.context=context;
         this.steps=steps;
-//        for(int i = 0; i < steps.size(); i++){
-//            this.steps.add(steps.get(i));
-//        }
     }
-
-
-    //public popularFoodAdapter(MainActivity mainActivity, List<popularFood> popularFoodList) {
-    //}
 
     @NonNull
     @Override
-    //ada tukar line bawah ni *Public popularFoodAdapter.popularFoodViewHolder
-    public tutorialStepsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+    public tutorialStepsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.tutorial_steps_item,parent, false);
         return new tutorialStepsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull tutorialStepsAdapter.tutorialStepsViewHolder holder, int position) {
-
-        //Picasso.get().load(getYoutubeThumbnailUrlFromVideoUrl(popularFoodList.get(position).getImageUrl())).into(holder.foodImage);
-
-        //  holder.foodImage.setImageResource(popularFoodList.get(position).getImageUrl());
         holder.steps.setText(steps.get(position));
-
-
     }
 
     @Override

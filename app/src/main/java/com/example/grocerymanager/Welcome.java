@@ -43,6 +43,7 @@ public class Welcome extends AppCompatActivity {
         signupBtn = findViewById(R.id.signupBtn);
         fAuth = FirebaseAuth.getInstance();
 
+        //Check if the user is already signed in
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<grocery> expiredItems;
     private grocery GroceryItems;
     private ArrayList<String> Steps;
+    //The endpoint parameters for the kitchen tips website, which will be used to scrap later
     private String stepsURL [] ={"how-to-beat-egg-whites", "how-to-cook-basmati-rice",
             "how-to-cook-pasta", "how-to-cook-salmon", "how-to-fry-a-steak",
             "how-to-peel-and-deveine-a-prawn", "how-to-poach-an-egg",
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View headerView;
     private DatabaseReference ref;
     private FirebaseAuth fAuth;
-    private ImageView registerBtn, addBtn, storeBtn, deleteBtn, viewBtn, recipeBtn;
+    private ImageView addBtn, storeBtn, viewBtn, recipeBtn;
     private TextView userName, ownerName;
 
     @Override
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ownerName =findViewById(R.id.owner);
         fAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference(fAuth.getCurrentUser().getUid());
-
+        //Connecting to the database to find the name of the user
        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+       //Initializing the navigation drawer
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
@@ -151,19 +153,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
-    public void btnClick(View view) {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), Login.class));
-    }
-
+    //This is the function to load the tutorial cards
     public void loadCards(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     tutorialsList = new ArrayList<>();
+                    //This part will scarp the website
                     for(int i = 0; i < 10; i++) {
+                        //This part will scrap the whole page
                         String url = "https://spoonacular.com/academy/" + stepsURL[i];
                         Log.d("URLs", url);
                         org.jsoup.nodes.Document doc = Jsoup.connect(url).get();
@@ -180,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.d("Number of items", String.valueOf(numSteps));
                         Log.d("total steps", String.valueOf(totalSteps));
                         Steps = new ArrayList<>();
+                        //This part will scrap the instructions
                         for (int j = 0; j < totalSteps; j++) {
                             Steps.add(steps.select("li").eq(j).text());
                             Log.d("Steps", steps.select("li").eq(j).text());
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }){}.start();
     }
-
+    //Load the items that are going to expire in 3 days
     public void loadExpItems(){
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
         ref.addValueEventListener(new ValueEventListener() {
@@ -219,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             expiredItems = new ArrayList<>();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 final grocery gro_list = dataSnapshot.getValue(grocery.class);
+                                //To calculate the current date
                                 LocalDate date = LocalDate.now();
                                 String cDate = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                                 String oDate = gro_list.getDate();
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Date dateObj2 = dateStructure.parse(oDate);
                                 long diff = dateObj2.getTime() - dateObj1.getTime();
                                 int diffDays = (int) (diff/(24 * 60 * 60 * 1000));
+                                //To find the items which will expire in three days
                                 if (diffDays<= 3) {
                                     String txt = gro_list.getName();
                                     String ty = gro_list.getType();
@@ -265,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+    //Initializing the cards for tutorial by connecting to the adapter
     public void setCardsRecycler(List<Tutorials> tutorialsList){
         cardsRecycler = findViewById(R.id.cards_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
@@ -272,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TutorialCardAdapter = new tutorialCardsAdapter(this,tutorialsList);
         cardsRecycler.setAdapter(TutorialCardAdapter);
     }
-
+    //Initializing the cards for expiring items by connecting to the adapter
     public void setExpiryRecycler(List<grocery> expiredItems){
         expiryRecycler = findViewById(R.id.expiry_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false);
@@ -281,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         expiryRecycler.setAdapter(ExpGroceryAdapter);
     }
 
-
+    //The buttons function for navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
