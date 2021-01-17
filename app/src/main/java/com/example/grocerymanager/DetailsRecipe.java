@@ -33,6 +33,7 @@ import okhttp3.ResponseBody;
 
 
 public class DetailsRecipe extends AppCompatActivity {
+    //Declaring Variables
     private Button button;
     String recipeIngredients = "https://api.spoonacular.com/recipes/637876/ingredientWidget.json?apiKey=fde780bf140e4dbbaefd90ab69e3d459";
     String recipeIngredients1 = "https://api.spoonacular.com/recipes/";
@@ -46,7 +47,6 @@ public class DetailsRecipe extends AppCompatActivity {
     String recipeInstruction1 = "https://api.spoonacular.com/recipes/";
     //String recipeInstruction2 = "/analyzedInstructions?apiKey=fde780bf140e4dbbaefd90ab69e3d459";
     String recipeInstruction2 = "/analyzedInstructions?apiKey=b07a52c682e244109a54eb58858235d3";
-
     OkHttpClient client = new OkHttpClient();
     String unit, nama, namaBahan, id, summary,namaBarang,cara,pic;
     int number;
@@ -64,7 +64,6 @@ public class DetailsRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
 
-        Log.v("Details Activity","Entered");
         title = (TextView) findViewById(R.id.nama_recipe);
         food_pic = (ImageView) findViewById(R.id.main_image);
 
@@ -72,6 +71,7 @@ public class DetailsRecipe extends AppCompatActivity {
         ingridientContent = (TextView) findViewById(R.id.ingridient_recipe);
         instructionContent = (TextView) findViewById(R.id.instrction_recipe);
 
+        //Back button to redirect to Recipe
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +81,12 @@ public class DetailsRecipe extends AppCompatActivity {
             }
         });
 
+        //Recieving recipe id & pic url from adapter
         Intent intent = getIntent();
         id = intent.getStringExtra("id_recipe");
         pic = intent.getStringExtra("food_pic");
-        Log.v("intent","Intent successful");
 
+        //concatenation
         String fullApiRecipeIngredients = recipeIngredients1 + id + recipeIngredients2;
         try {
             Log.v("fullApi","Successful");
@@ -98,20 +99,18 @@ public class DetailsRecipe extends AppCompatActivity {
 
     }
 
-
+    //Funcction redirect to Recipe
     public void openMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Recipe.class);
         startActivity(intent);
     }
 
-
+    //Retrieving information from API from first URL
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     void run(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        Log.v("Recipe Ingredient ","Entering run successful");
-
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -129,23 +128,20 @@ public class DetailsRecipe extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                     String responseString = responseBody.string();
-                    Log.v("Recipe Ingredient ","Entering OnResponse successful");
 
                     //JSON parsing
                     try {
                         JSONObject balas = new JSONObject(responseString);
                         JSONArray ingredients = balas.getJSONArray("ingredients");
-                        Log.v("Recipe Ingredient ","Entering Parsing Recipe Ingredients");
 
+                        //Retrieving JSON Object from API
                         for (int i = 0; i < ingredients.length(); i++) {
                             JSONObject singleIngredient = ingredients.getJSONObject(i);
                             namaBahan = singleIngredient.getString("name");
-
                             JSONObject amount = singleIngredient.getJSONObject("amount");
                             JSONObject calcMalaysia = amount.getJSONObject("metric");
                             value = calcMalaysia.getDouble("value");
                             unit = calcMalaysia.getString("unit");
-                            Log.v("Recipe Ingredient ","Parsing  successful");
                             bahanIncrement = bahanIncrement+namaBahan + "\n";
 
 
@@ -153,8 +149,6 @@ public class DetailsRecipe extends AppCompatActivity {
 
                         String fullApiRecipeSummary = recipeSummary1 + id + recipeSummary2;
                         run1(fullApiRecipeSummary);
-                        Log.v("Recipe Ingredient ","called run1");
-
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -174,12 +168,12 @@ public class DetailsRecipe extends AppCompatActivity {
         });
     }
 
+    //Retrieving information from API from second URL
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     void run1(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        Log.v("Recipe Summary ","Requested  Recipe Summary URL");
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -200,18 +194,12 @@ public class DetailsRecipe extends AppCompatActivity {
                     String responseString = responseBody.string();
                     //JSON parsing
                     try {
+                        //Retrieving JSON Object from API
                         JSONObject balas = new JSONObject(responseString);
                         nama = balas.getString("title");
                         summary = balas.getString("summary");
-                        Log.v("Recipe Summary ",nama);
-                        Log.v("Recipe Summary",summary);
-
-
-
                         String fullApiRecipeInstruction = recipeInstruction1 + id + recipeInstruction2;
                         run2(fullApiRecipeInstruction);
-                        Log.v("Recipe Summary ","called run2");
-
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -233,13 +221,12 @@ public class DetailsRecipe extends AppCompatActivity {
 
     }
 
+    //Retrieving information from API from third URL
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     void run2(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        Log.v("Recipe Instrcution ","Entered successful run2");
-
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -259,54 +246,36 @@ public class DetailsRecipe extends AppCompatActivity {
                     String responseString = responseBody.string();
                     //JSON parsing
                     try {
-                        Log.v("Recipe Instrcution ","Entered parsing successful run2");
-
+                        //Retrieving JSON Object from API
                         JSONArray balas = new JSONArray(responseString);
-                        Log.v("Recipe Instrcution","Balas OK");
                         JSONObject balasObject = balas.getJSONObject(0);
-                        Log.v("Recipe Instrcution","BalasObject OK");
                         JSONArray steps = balasObject.getJSONArray("steps");
-                        Log.v("Recipe Instrcution", "Steps OK");
 
                         for (int i = 0; i < steps.length(); i++) {
                             JSONObject singleStep = steps.getJSONObject(i);
-                            Log.v("Recipe Instrcution", "SingleSteps OK");
                             number = singleStep.getInt("number");
-                            Log.v("Recipe Instrcution", String.valueOf(number));
                             cara = singleStep.getString("step");
-                            Log.v("Recipe Instrcution", cara.toString());
                             JSONArray barang = singleStep.getJSONArray("equipment");
-                            Log.v("Recipe Instrcution", barang.toString());
 
                             //JSONObject barangObject = barang.getJSONObject(0);
-                            Log.v("Recipe Instrcution", "BarangObject Barang  OK");
                             //namaBarang = barangObject.getString("name");
-                            Log.v("Recipe Instrcution", "BarangObject namaBarang OK");
-
-                            Log.v("Recipe Instrcution ", String.valueOf(number));
-                            Log.v("Recipe Instrcution",cara);
                             // Log.v("Recipe Instrcution",namaBarang);
-                            Log.v("Recipe Instrcution", String.valueOf(steps.length()));
+
+                            //Making new line for each information recieved from API
                             caraIncrement = caraIncrement+cara+ "\n";
                         }
 
-                        Log.v("UI Thread ","Entering UI Thread ");
+                        //Entering UI Thread
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 title.setText(nama);
                                 Picasso.get().load(pic).into(food_pic);
-                                Log.v("UI Thread ","Entering 5 on UI Thread Successful");
-                                Log.v("UI Thread ", summary);
                                 //summaryContent.setText("summary test");
                                 //summaryContent.setText(summary);
-                                // Log.v("UI Thread ","Summary on UI Thread Successful");
                                 ingridientContent.setText(bahanIncrement);
-                                Log.v("UI Thread ","namaBahan on UI Thread Successful");
                                 instructionContent.setText(caraIncrement);
-                                Log.v("UI Thread ","cara on UI Thread Successful");
-
-                                Log.v("UI Thread ","Run on UI Thread Successful");
 
                             }
                         });

@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.mbms.StreamingServiceInfo;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.grocerymanager.BreakfastFoodAdapter;
@@ -53,12 +56,12 @@ import okhttp3.ResponseBody;
 
 public class Recipe extends AppCompatActivity {
 
+    //Declaring Variables
     RecyclerView popularRecycler, breakfastRecycler, lunchRecycler, dinnerRecycler;
     popularFoodAdapter PopularFoodAdapter;
     BreakfastFoodAdapter breakfastFoodAdapter;
     LunchFoodAdapter lunchFoodAdapter;
     DinnerFoodAdapter dinnerFoodAdapter;
-    String searchCharacter = "chicken";
     //String breakfastMain = "https://api.spoonacular.com/recipes/complexSearch?query=meat&type=breakfast&number=10&apiKey=fde780bf140e4dbbaefd90ab69e3d459";
     String breakfastMain = "https://api.spoonacular.com/recipes/complexSearch?query=meat&type=breakfast&number=10&apiKey=b07a52c682e244109a54eb58858235d3";
     //String randomRecipe = "https://api.spoonacular.com/recipes/complexSearch?query=";
@@ -70,76 +73,55 @@ public class Recipe extends AppCompatActivity {
     List<BreakfastFood> breakfastFoodList;
     List<LunchFood> lunchFoodList;
     List<DinnerFood> dinnerFoodList;
-
-    TabLayout tabLayout;
-    ViewPager viewPager;
+    Button button;
     ArrayList<String> ingredientsList;
 
-
+    //Parsing popular food
     protected void parsePopular(JSONArray result) throws JSONException{
-
         popularFoodList = new ArrayList<>();
         for (int i = 0; i < result.length(); i++) {
-            Log.v("tittle", "settlejjjjjj");
             JSONObject recipe = result.getJSONObject(i);
             String tittle = recipe.getString("title");
-            Log.v("tittle", tittle);
             String imageLink = recipe.getString("image");
             String id = recipe.getString("id");
-            Log.v("image", imageLink);
             popularFoodList.add(new PopularFoods(tittle, "4.57", imageLink, id));
         }
     }
 
+    //Parsing breakfast food
     protected void parseBreakfast(JSONArray result) throws JSONException{
         breakfastFoodList = new ArrayList<>();
         for (int i = 0; i < result.length(); i++) {
-            Log.v("tittle", "settlejjjjjj");
             JSONObject recipe = result.getJSONObject(i);
             String tittle = recipe.getString("title");
-            Log.v("tittle", tittle);
             String imageLink = recipe.getString("image");
-            Log.v("image", imageLink);
             String id = recipe.getString("id");
-            Log.v("breakfast", "Lepas ke belum");
             breakfastFoodList.add(new BreakfastFood(tittle, "4.5", imageLink, id));
-            //breakfastFoodList.add(new BreakfastFood("title","2.0",imageLink));
-            Log.v("breakfast", "Lepas dah add breakfast");
         }
     }
 
+    //Parsing lunch food
     protected void parseLunch(JSONArray result) throws JSONException{
         lunchFoodList = new ArrayList<>();
         for (int i = 0; i <  result.length(); i++) {
-            Log.v("tittle", "masuk lunch");
             JSONObject recipe = result.getJSONObject(i);
             String tittle = recipe.getString("title");
-            Log.v("tittle", tittle);
             String imageLink = recipe.getString("image");
-            Log.v("image", imageLink);
             String id = recipe.getString("id");
-            Log.v("breakfast", "Lepas ke belum");
             lunchFoodList.add(new LunchFood(tittle, "4.5", imageLink,id));
-            //breakfastFoodList.add(new BreakfastFood("title","2.0",imageLink));
-            Log.v("breakfast", "Lepas dah add lunch");
         }
 
     }
 
+    //Parsing dinner food
     protected  void parseDinner(JSONArray result) throws JSONException{
         dinnerFoodList = new ArrayList<>();
         for (int i = 0; i <result.length(); i++) {
-            Log.v("tittle", "masuk dinner");
             JSONObject recipe = result.getJSONObject(i);
             String tittle = recipe.getString("title");
-            Log.v("tittle", tittle);
             String imageLink = recipe.getString("image");
-            Log.v("image", imageLink);
             String id = recipe.getString("id");
-            Log.v("breakfast", "Lepas ke belum");
             dinnerFoodList.add(new DinnerFood(tittle, "4.5", imageLink,id));
-            //breakfastFoodList.add(new BreakfastFood("title","2.0",imageLink));
-            Log.v("breakfast", "Lepas dah add dinner");
         }
     }
 
@@ -149,30 +131,21 @@ public class Recipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        //tab changes
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager = findViewById(R.id.view_pager);
-
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        arrayList.add("Popular");
-        arrayList.add("Breakfast");
-        arrayList.add("Lunch");
-        arrayList.add("Dinner");
-
-        prepareViewPager(viewPager ,arrayList );
-
-        tabLayout.setupWithViewPager(viewPager);
-
+        //Container for food lists
         popularFoodList = new ArrayList<>();
         breakfastFoodList = new ArrayList<>();
         lunchFoodList = new ArrayList<>();
         dinnerFoodList = new ArrayList<>();
         fetchIngredients();
 
+        button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMainActivity();
 
-
-        Log.v("tittle", "toyaaaaa");
+            }
+        });
 
         query="meat";
         type="popular";
@@ -187,80 +160,37 @@ public class Recipe extends AppCompatActivity {
 
     }
 
-    private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList) {
-        MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
-        BlankFragment fragment = new BlankFragment();
-
-        for(int i=0; i<arrayList.size(); i++){
-            Bundle bundle = new Bundle();
-            bundle.putString("title",arrayList.get(i));
-            fragment.setArguments(bundle);
-            adapter.addFragment(fragment,arrayList.get(i));
-            fragment = new BlankFragment();
-        }
-        //set adapter
-        viewPager.setAdapter(adapter);
-
+    //Funcction redirect to Recipe
+    public void openMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
-    private class MainAdapter extends FragmentPagerAdapter {
-        ArrayList<String> arrayList = new ArrayList<>();
-        List<Fragment> fragmentList = new ArrayList<>();
-
-        public void addFragment(Fragment fragment, String title){
-            arrayList.add(title);
-            fragmentList.add(fragment);
-        }
-
-        public MainAdapter(@NonNull FragmentManager fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-
-            return fragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentList.size();
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return arrayList.get(position);
-        }
-    }
-
-    //problem 1 minute 23:09
+    //Set card like view for popular food in horizontal view
     private void setPopularRecycler(List<PopularFoods> popularFoodList) {
         popularRecycler = findViewById(R.id.popular_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         popularRecycler.setLayoutManager(layoutManager);
-        //problem3
         PopularFoodAdapter = new popularFoodAdapter(this, popularFoodList);
         popularRecycler.setAdapter(PopularFoodAdapter);
 
     }
 
+    //Set card like view for breakfast food in horizontal view
     private void setBreakfastRecycler(List<BreakfastFood> breakfastFoodList) {
         breakfastRecycler = findViewById(R.id.breakfast_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         breakfastRecycler.setLayoutManager(layoutManager);
-        //problem3
         breakfastFoodAdapter = new BreakfastFoodAdapter(this, breakfastFoodList);
         breakfastRecycler.setAdapter(breakfastFoodAdapter);
 
     }
 
+    //Set card like view for lunch food in horizontal view
     private void setLunchRecycler(List<LunchFood> lunchFoodList) {
         lunchRecycler = findViewById(R.id.lunch_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         lunchRecycler.setLayoutManager(layoutManager);
-        //problem3
         lunchFoodAdapter = new LunchFoodAdapter(this, lunchFoodList);
         lunchRecycler.setAdapter(lunchFoodAdapter);
         int size = lunchFoodList.size();
@@ -269,11 +199,11 @@ public class Recipe extends AppCompatActivity {
 
     }
 
+    //Set card like view for dinner food in horizontal view
     private void setDinnerRecycler(List<DinnerFood> dinnerFoodList) {
         dinnerRecycler = findViewById(R.id.dinner_recycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         dinnerRecycler.setLayoutManager(layoutManager);
-        //problem3
         dinnerFoodAdapter = new DinnerFoodAdapter(this, dinnerFoodList);
         dinnerRecycler.setAdapter(dinnerFoodAdapter);
     }
@@ -281,6 +211,7 @@ public class Recipe extends AppCompatActivity {
     //Internet Access Permission
     private final OkHttpClient client = new OkHttpClient();
 
+    //Function to retrieve title and picture in Popular section from API
     public void requestPopular(final String fullApi) throws Exception {
 
         Request request = new Request.Builder()
@@ -304,18 +235,15 @@ public class Recipe extends AppCompatActivity {
             //Response ada tapi tak semsstinya content tu ada (error404)
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.v("tittle", "MAsuk blum");
 
                 try (ResponseBody responseBody = response.body()) {
                     {
-                        Log.v("tittle", "settle");
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
                             query = "";
                             JSONObject reader = new JSONObject(responseString);
                             JSONArray result = reader.getJSONArray("results");
-                            Log.v("response", responseString);
                             parsePopular(result);
                             if(!ingredientsList.isEmpty()){
                                 for(int i=0;i<ingredientsList.size();i++)
@@ -352,6 +280,7 @@ public class Recipe extends AppCompatActivity {
         });
     }
 
+    //Function to retrieve title and picture in Breakfast section from API
     public void requestBreakfast(final String fullApi) throws Exception {
 
         Request request = new Request.Builder()
@@ -375,18 +304,14 @@ public class Recipe extends AppCompatActivity {
             //Response ada tapi tak semsstinya content tu ada (error404)
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.v("tittle", "MAsuk blum");
-
                 try (ResponseBody responseBody = response.body()) {
                     {
-                        Log.v("tittle", "settle");
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
                             query = "";
                             JSONObject reader = new JSONObject(responseString);
                             JSONArray result = reader.getJSONArray("results");
-                            Log.v("response", responseString);
                             parseBreakfast(result);
                             if(!ingredientsList.isEmpty()){
                                 for(int i=0;i<ingredientsList.size();i++)
@@ -423,6 +348,7 @@ public class Recipe extends AppCompatActivity {
         });
     }
 
+    //Function to retrieve title and picture in Lunch section from API
     public void requestLunch(final String fullApi) throws Exception {
 
         Request request = new Request.Builder()
@@ -446,11 +372,9 @@ public class Recipe extends AppCompatActivity {
             //Response ada tapi tak semsstinya content tu ada (error404)
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.v("tittle", "MAsuk blum");
 
                 try (ResponseBody responseBody = response.body()) {
                     {
-                        Log.v("tittle", "settle");
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
@@ -497,6 +421,7 @@ public class Recipe extends AppCompatActivity {
         });
     }
 
+    //Function to retrieve title and picture in Dinner section from API
     public void requestDinner(String fullApi) throws Exception {
 
         Request request = new Request.Builder()
@@ -517,23 +442,19 @@ public class Recipe extends AppCompatActivity {
             }
 
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            //Response ada tapi tak semsstinya content tu ada (error404)
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.v("tittle", "MAsuk blum");
 
                 try (ResponseBody responseBody = response.body()) {
                     {
-                        Log.v("tittle", "settle");
                         String responseString = responseBody.string();
                         //JSON parsing
                         try {
                             JSONObject reader = new JSONObject(responseString);
                             JSONArray result = reader.getJSONArray("results");
-                            Log.v("response", responseString);
-
                             parseDinner(result);
 
+                            //Entering UI Thread
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -561,6 +482,7 @@ public class Recipe extends AppCompatActivity {
         });
     }
 
+    //Fetching ingridients list from database
     public void fetchIngredients(){
         ingredientsList = new ArrayList<>();
 
