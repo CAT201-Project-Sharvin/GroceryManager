@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardLayout">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,16 +36,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cabbage"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:id="@+id/exp_item_name"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/montserratmedium"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Today"
-                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:fontFamily="@font/lorabold"
+                android:textColor="@color/black"
                 android:id="@+id/exp_item_day"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="5dp"/>

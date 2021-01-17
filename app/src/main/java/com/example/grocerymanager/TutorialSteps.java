@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.firebase.database.annotations.NotNull;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -19,18 +20,25 @@ public class TutorialSteps extends AppCompatActivity {
     RecyclerView tutorialRecycler;
     tutorialStepsAdapter TutorialStepsAdapter;
     ArrayList<String> Steps;
-    String vID;
+    String vID, vTitle, vDesc;
     YouTubePlayerView videoView;
+    TextView title, desc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial_steps);
         videoView = findViewById(R.id.videoView);
+        title = findViewById(R.id.videoTitle);
+        //desc = findViewById(R.id.desc);
         getLifecycle().addObserver(videoView);
-        if (getIntent().hasExtra("image_url") && getIntent().hasExtra("youtube_link")) {
+        if (getIntent().hasExtra("image_url") && getIntent().hasExtra("youtube_link") && getIntent().hasExtra("title") && getIntent().hasExtra("short_desc")) {
             Steps = getIntent().getStringArrayListExtra("image_url");
             vID = getIntent().getStringExtra("youtube_link");
+            vTitle = getIntent().getStringExtra("title");
+            //vDesc = getIntent().getStringExtra("short_desc");
+            title.setText(vTitle);
+            //desc.setText(vDesc);
             Log.d("link", vID);
             Log.d("StepsTuto", String.valueOf(Steps.size()));
             videoView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {

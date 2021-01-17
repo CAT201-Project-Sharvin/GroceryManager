@@ -44,7 +44,7 @@ public class tutorialCardsAdapter extends RecyclerView.Adapter<tutorialCardsAdap
 
 
         holder.title.setText(tutorialsList.get(position).getTitle());
-        holder.desc.setText(tutorialsList.get(position).getShortDesc());
+        //holder.desc.setText(tutorialsList.get(position).getShortDesc());
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +56,8 @@ public class tutorialCardsAdapter extends RecyclerView.Adapter<tutorialCardsAdap
                 Intent intent = new Intent(context, TutorialSteps.class);
                 intent.putExtra("image_url", tutorialsList.get(position).getSteps());
                 intent.putExtra("youtube_link", tutorialsList.get(position).getVideoID());
+                intent.putExtra("title", tutorialsList.get(position).getTitle());
+                intent.putExtra("short_desc", tutorialsList.get(position).getShortDesc());
                 context.startActivity(intent);
             }
         });
@@ -77,7 +79,7 @@ public class tutorialCardsAdapter extends RecyclerView.Adapter<tutorialCardsAdap
 
             foodImage=itemView.findViewById(R.id.stepsImg);
             title = itemView.findViewById(R.id.stepsTitle);
-            desc= itemView.findViewById(R.id.stepsDesc);
+            //desc= itemView.findViewById(R.id.stepsDesc);
             mainLayout= itemView.findViewById(R.id.main_layout);
         }
     }

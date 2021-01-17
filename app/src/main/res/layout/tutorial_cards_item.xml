@@ -21,8 +21,9 @@
 
             <LinearLayout
                 android:layout_width="250dp"
-                android:layout_height="200dp"
-                android:orientation="vertical">
+                android:layout_height="170dp"
+                android:orientation="vertical"
+                android:background="@drawable/tutorialbackground">
 
                 <!-- Media -->
                 <ImageView
@@ -44,18 +45,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Title"
-                        android:textSize="20sp"
+                        android:fontFamily="@font/montserratsemibold"
+                        android:textSize="15sp"
                         android:id="@+id/stepsTitle"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Description"
-                        android:id="@+id/stepsDesc"
-                        android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?android:attr/textColorSecondary"
                         />
 
 
