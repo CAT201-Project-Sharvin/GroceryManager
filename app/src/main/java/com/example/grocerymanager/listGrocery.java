@@ -1,16 +1,22 @@
 package com.example.grocerymanager;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,47 +25,38 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class listGrocery extends AppCompatActivity {
 
-    ListView listView;
-    TextView link;
+    List<grocery> fetchdata;
+    RecyclerView rv;
+    GroceryAdapter ga;
+    DatabaseReference dr;
+    Button home, add;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_grocery);
+        rv = findViewById(R.id.recyclerview);
+        home = findViewById(R.id.et_home);
+        add = findViewById(R.id.floatingActionButton2);
 
-        listView = findViewById(R.id.text1);
+        fetchdata = new ArrayList<>();
 
-        final ArrayList<String> name = new ArrayList<>();
-        final ArrayList<String> type = new ArrayList<>();
-        final ArrayList<String> expiry = new ArrayList<>();
-        final ArrayList<String> quantity = new ArrayList<>();
-        final ArrayList<String> image = new ArrayList<>();
+        //going to root in firebase where data is stored.
+        dr = FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
 
-        final ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.list_item,name);
-        listView.setAdapter(adapter);
-
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("grocery_list");
-        ref.addValueEventListener(new ValueEventListener() {
+        dr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                name.clear();
-                type.clear(); expiry.clear();quantity.clear();image.clear();
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-                    final grocery gro_list=dataSnapshot.getValue(grocery.class);
-                    String txt = gro_list.getName();
-                    String ty = gro_list.getType();
-                    String quan = String.valueOf(gro_list.getQuantity());
-                    String exp = gro_list.getDate();
-                    String img = gro_list.getImageUri();
-                    name.add(txt);
-                    type.add(ty);
-                    expiry.add(exp);
-                    quantity.add(quan);
-                    image.add(img);
+                    //reading data from firebase.
+                    grocery gro_list=dataSnapshot.getValue(grocery.class);
+                    fetchdata.add(gro_list);
                 }
-                adapter.notifyDataSetChanged();
+                setCards(fetchdata);
             }
 
             @Override
@@ -68,19 +65,34 @@ public class listGrocery extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent nextpage = new Intent(listGrocery.this,viewGrocery.class);
-                nextpage.putExtra("grocery_name", name.get(i));
-                nextpage.putExtra("grocery_type", type.get(i));
-                nextpage.putExtra("grocery_expiry", expiry.get(i));
-                nextpage.putExtra("grocery_quantity", quantity.get(i));
-                nextpage.putExtra("image_uri",image.get(i));
+        //button will bring user to home page when clicked
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view)
+            {
+                Intent nextpage = new Intent(listGrocery.this,MainActivity.class);
                 startActivity(nextpage);
             }
-
         });
+
+        //user will be redirected to page where they can add new grocery information
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view)
+            {
+                Intent nextpage = new Intent(listGrocery.this,addGrocery.class);
+                startActivity(nextpage);
+                finish();
+            }
+        });
+
+
+    }
+
+    public void setCards(List<grocery> fetchdata){ // setting fetched data in recyclerview
+        rv = findViewById(R.id.recyclerview);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL,false);
+        rv.setLayoutManager(layoutManager);
+        //problem3
+        ga = new GroceryAdapter(this,fetchdata);
+        rv.setAdapter(ga);
     }
 }
