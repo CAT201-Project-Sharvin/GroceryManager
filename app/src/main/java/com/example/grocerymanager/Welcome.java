@@ -66,6 +66,7 @@ public class Welcome extends AppCompatActivity {
             }
             private void Breakfast_Time(){
                 createNotificationChannel1();
+                //Set the time to notify (7.00 a.m)
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(Calendar.HOUR_OF_DAY, 7);
                 calendar1.set(Calendar.MINUTE, 0);
@@ -79,6 +80,7 @@ public class Welcome extends AppCompatActivity {
 
             private void Lunch_Time(){
                 createNotificationChannel2();
+                //Set the time to notify (11.00 a.m)
                 Calendar calendar2 = Calendar.getInstance();
                 calendar2.set(Calendar.HOUR_OF_DAY, 11);
                 calendar2.set(Calendar.MINUTE, 0);
@@ -91,6 +93,7 @@ public class Welcome extends AppCompatActivity {
 
             private void Dinner_Time(){
                 createNotificationChannel3();
+                //Set the time to notify (6.00 p.m)
                 Calendar calendar3 = Calendar.getInstance();
                 calendar3.set(Calendar.HOUR_OF_DAY, 18);
                 calendar3.set(Calendar.MINUTE, 0);
@@ -105,11 +108,12 @@ public class Welcome extends AppCompatActivity {
                 final ArrayList<String> list = new ArrayList();
                 final ArrayList<String> expiry = new ArrayList();
                 String pattern = "mm/dd/yyyy";
+                //Function to convert date today to string
                 @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat(pattern);
                 Date today = Calendar.getInstance().getTime();
                 String tod = df.format(today);
 
-
+                //Set the time to notify (12.00 a.m)
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY,0);
                 calendar.set(Calendar.MINUTE,0);
@@ -129,7 +133,7 @@ public class Welcome extends AppCompatActivity {
                             final grocery grocery_list = dataSnapshot.getValue(grocery.class);
                             final String exp = grocery_list.getDate();
                             expiry.add(exp);
-
+                            //compare both the dates on string
                             if(exp==tod){
                                 createNotificationChannel();
                                 alarmManager3.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent3);
@@ -145,6 +149,8 @@ public class Welcome extends AppCompatActivity {
 
             }
 
+            // The channel functions below are created to support Notification on Android version 8 and above
+            // Four channels for each type of Notifications
             private  void createNotificationChannel(){
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

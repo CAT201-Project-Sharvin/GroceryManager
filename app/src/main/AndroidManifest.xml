@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryManager">
         <activity android:name=".TutorialSteps"></activity>
-        <activity android:name=".Notification_ON_time" />
         <activity android:name=".Register" />
         <activity android:name=".Login" />
         <activity android:name=".Welcome">
