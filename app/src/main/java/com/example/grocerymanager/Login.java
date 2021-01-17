@@ -24,11 +24,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
 
-    com.google.android.material.textfield.TextInputEditText Email, Password;
-    Button LoginBtn;
-    FirebaseAuth fAuth;
-    ProgressBar progressBar;
-    TextView registerNavigation, forgotOption;
+    private com.google.android.material.textfield.TextInputEditText Email, Password;
+    private Button LoginBtn;
+    private FirebaseAuth fAuth;
+    private ProgressBar progressBar;
+    private TextView registerNavigation, forgotOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

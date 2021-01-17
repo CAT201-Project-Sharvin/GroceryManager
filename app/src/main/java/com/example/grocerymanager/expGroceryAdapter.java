@@ -27,8 +27,8 @@ import java.util.List;
 
 public class expGroceryAdapter extends RecyclerView.Adapter<expGroceryAdapter.expGroceryViewHolder>{
 
-    Context context;
-    List<grocery> groceryList;
+    private Context context;
+    private List<grocery> groceryList;
 
     public expGroceryAdapter(Context context,List<grocery>groceryList){
         this.context=context;

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class tutorialStepsAdapter extends RecyclerView.Adapter<tutorialStepsAdapter.tutorialStepsViewHolder> {
 
-    Context context;
-    ArrayList<String> steps;
+    private Context context;
+    private ArrayList<String> steps;
 
 
     public tutorialStepsAdapter(Context context, ArrayList<String> steps){
