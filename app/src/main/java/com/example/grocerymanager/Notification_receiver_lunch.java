@@ -16,6 +16,7 @@ public class Notification_receiver_lunch extends BroadcastReceiver {
         repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,200,repeating_intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //Builds the notification while in sync with the notification channel via the similar channel id
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"lunch")
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(android.R.drawable.ic_notification_overlay)
@@ -25,7 +26,7 @@ public class Notification_receiver_lunch extends BroadcastReceiver {
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
+        //unique id to link with the channel to determine which notification this is suppose to be
         notificationManager.notify(200,builder.build());
 
     }
