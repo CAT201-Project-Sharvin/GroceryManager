@@ -3,7 +3,7 @@ package com.example.grocerymanager;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+//Stores the details of the each scrapped details from the website
 public class Tutorials {
     private String title;
     private String shortDesc;
@@ -73,11 +73,14 @@ public class Tutorials {
         return "https://img.youtube.com/vi/"+extractId(videoUrl) + "/1.jpg";
     }
 
+    //This function to extract the id from Youtube embed link
     public static String extractId(String YoutubeUrl) {
+        //Remove the youtube parameters from the link
         YoutubeUrl = YoutubeUrl.replace("&feature=youtu.be", "");
         if (YoutubeUrl.toLowerCase().contains("youtu.be")) {
             return YoutubeUrl.substring(YoutubeUrl.lastIndexOf("/") + 1);
         }
+        //Removes unrelevant symbols
         String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(YoutubeUrl);

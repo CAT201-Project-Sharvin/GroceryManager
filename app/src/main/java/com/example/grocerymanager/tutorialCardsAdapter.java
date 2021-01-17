@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Adapter to display the cards for the kitchen tips in the main ui
 public class tutorialCardsAdapter extends RecyclerView.Adapter<tutorialCardsAdapter.tutorialCardViewHolder> {
     private Context context;
     private List<Tutorials> tutorialsList;
@@ -49,7 +49,7 @@ public class tutorialCardsAdapter extends RecyclerView.Adapter<tutorialCardsAdap
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //Pass the information to next Intent if there's any of the card is pressed
                 ArrayList<String> Stps = tutorialsList.get(position).getSteps();
                 int stepsnum = Stps.size();
                 Log.d("Number of steps: ", String.valueOf(stepsnum));
