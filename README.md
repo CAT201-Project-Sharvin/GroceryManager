@@ -46,15 +46,18 @@ to extract the details. </p>
 
 ## Languages and Technologies Used
 
-<ul> Languages
-  <li> Java </li>
-  </ul>
-  
- <ul> Technologies
-  <li> Firebase </li>
-  <li> Spoonacular API </li>
-  <li> Jsoup for web scrapping </li>
-  </ul>
+<ol> 
+  <li>Languages</li>
+    <ul>
+      <li> Java </li>
+    </ul>
+  <li>Technologies</li>
+   <ul>
+      <li> Firebase </li>
+      <li> Spoonacular API </li>
+      <li> Jsoup for web scrapping </li>
+    </ul>
+ </ol>
   
   ## Application
   
