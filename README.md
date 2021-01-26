@@ -2,7 +2,7 @@
 
 <p align="center"><i>One stop solution to track your grocery list and suggest you with daily recipes</i></p>
 
-<img src="
+<img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G3.jpg" />
 
 ## Introduction
 
@@ -43,3 +43,41 @@ to extract the details. </p>
 ## Motivation
 
 <p> This app is invented to help many households. Many people tend to over buy their groceries as they don’t really remember of what is inside their refrigerator and after buying their groceries they will come to a realisation that it has always been in their refrigerator. This leads to wastage of foods. But our app can solve this problem by simply showing the list of items that are already in the refrigerator, so when the user arrives at the grocery store they do not have to crack their head thinking of what is in their refrigerator and what is not. They can simply open the app and view the list, later buy the groceries that is not in their fridge. This way we can overcome the problem of overbuying groceries. Next, many people can often track the dates of when they bought their groceries since we sometimes tend to overlook the expiry date and we may happen to eat the spoilt food. This can lead to many health issues. However, we have solved this problem by simply notifying the user if their grocery is about to expire in three days and this makes the user to simply keep track of the expiry dates on their food. Next, many young students who live far away from their family often do not get to eat good food and this way it allows them to buy groceries from nearby grocery stores. They might not know on how to utilise the groceries to make an edible food so our app solves this problem by suggesting the user awesome recipes for their breakfast, lunch and dinner based on the ingredients they have. This way students can get good food at the same time they can save their money by making homemade foods. The app will also have a feature to give kitchen tips which is helpful when it comes to cooking and with this way everyone will be able to cook. Apart from managing the groceries this app intends to promote cooking among youngsters.</p>
+
+## Languages and Technologies Used
+
+<ul> Languages
+  <li> Java </li>
+  </ul>
+  
+ <ul> Technologies
+  <li> Firebase </li>
+  <li> Spoonacular API </li>
+  <li> Jsoup for web scrapping </li>
+  </ul>
+  
+  ## Application
+  
+  - The Login and Sign Up page
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G1.jpg" />
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G2.jpg" />
+  
+  - Main UI and the navigation drawer
+   <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G3.jpg" />
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G4.jpg" />
+  
+  - Tracking grocery feature
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G5.jpg" />
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G6.jpg" />
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G7.jpg" />
+  
+  - Kitchen tips scrapped from websites
+  
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G8.jpg" />
+  
+  - Recipes suggested based on the ingredients
+  
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G9.jpg" />
+  <img src="https://github.com/CAT201-Project-Sharvin/GroceryManager/blob/master/images/G10.jpg" />
+  
+  
